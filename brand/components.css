@@ -1100,7 +1100,7 @@
   letter-spacing: .2em; text-transform: uppercase;
 }
 .hub__label { fill: var(--navy-ink); }
-.hub__core-label { fill: var(--parchment); font-size: 23px; }
+.hub__core-label { fill: var(--parchment); font-size: 20px; }
 .hub .fx { transform-box: fill-box; transform-origin: center; }
 
 /* ---- Rival set (slide 15): stat and table as one centred composition ---- */
@@ -1129,3 +1129,6 @@
   background: var(--gold); transform: translateY(-50%);
 }
 .cmp-card--muted .cmp-card__l li::before { background: var(--ink-mute); }
+
+/* The rule between the two lockups sits on the photo on a right-hand aside. */
+.l-aside:not(.l-aside-left) .foot-marks__rule { background: rgba(255,255,255,.55); }

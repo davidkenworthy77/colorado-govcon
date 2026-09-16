@@ -509,9 +509,9 @@ window.DeckCharts = (() => {
       svg.appendChild(el("line", { x1: x, x2: x, y1: ty + 8, y2: yTarget - 10,
         stroke: "currentColor", "stroke-width": 1.5, opacity: 0.3 }));
       const unit = d.months === 1 ? "month" : "months";
-      const name = txt(x, ty - 22, d.name, { size: hero ? 24 : 20, class: "ch-cat",
+      const name = txt(x, ty - 19, d.name, { size: hero ? 19 : 16, class: "ch-cat",
         fill: hero ? "var(--gold-ink)" : null });
-      const val = txt(x, ty, `${d.months.toLocaleString("en-US")} ${unit}`, { size: hero ? 22 : 19,
+      const val = txt(x, ty, `${d.months.toLocaleString("en-US")} ${unit}`, { size: hero ? 17 : 15,
         class: "ch-value", fill: hero ? "var(--gold-ink)" : null });
       if (go) { anim(name, "ch-fade", 1.1 + i * 0.08); anim(val, "ch-fade", 1.15 + i * 0.08); }
       svg.appendChild(name); svg.appendChild(val);
