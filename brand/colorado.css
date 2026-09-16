@@ -1,0 +1,186 @@
+/* ============================================================
+   BRAND — Colorado Governor's Conference on Tourism
+   brandId: cogovconf
+
+   Every value here is lifted from the supplied PowerPoint
+   template (2026_GovernorsConference_Deck Template.pptx), read
+   out of the slide and layout XML rather than guessed:
+
+     #3F3F3F  ink        305 uses — the template's body/heading grey
+     #EE9F36  gold        49 uses — the Colorado "C" sun
+     #EBE7DD  sand        23 uses — the title-panel and content fill
+     #F5F4EE  parchment    3 uses — the lighter tint of the same
+     #DC2927  red          6 uses — the Colorado "C"
+     #24436F  navy         3 uses — from the 150/250 badge
+     #32719E  mountain     3 uses
+     #63A0C4  sky          1 use
+     #005D8A  lake         1 use
+
+   The template supplies nine colours and no scale. Presenting
+   data needs a scale, so the ramps below are interpolated from
+   those anchors — every step is a tint or shade of a colour that
+   is already in the deck, never a new hue. That is the whole
+   rule: if a value here is not in the list above, it is derived
+   from something that is.
+
+   Contains NO layout. The engine reads only --brand-* tokens;
+   everything after that block is a convenience alias for the
+   component and deck stylesheets.
+   ============================================================ */
+
+@import url("fonts/fonts.css");
+
+:root {
+
+  /* ---------- engine tokens (the contract with engine/deck.css) ---------- */
+  --brand-primary:        #C77E1C;   /* gold, darkened to hold contrast as type on sand */
+  --brand-primary-bright: #EE9F36;   /* the template gold, for bars, rules and pips */
+  --brand-primary-deep:   #8A5510;   /* stat numerals, emphasis on light grounds */
+  --brand-ink:            #3F3F3F;
+  --brand-ink-soft:       #5C5C5C;
+  --brand-paper:          #FFFFFF;
+  --brand-bone:           #EBE7DD;
+
+  --brand-f-display:   'Bebas Neue', 'Oswald', Impact, sans-serif;
+  --brand-f-condensed: 'Bebas Neue', 'Oswald', sans-serif;
+  --brand-f-body:      'Helvetica Neue', Helvetica, 'Inter', system-ui, -apple-system, sans-serif;
+  --brand-f-slab:      'Roboto Slab', Georgia, serif;
+  --brand-f-mono:      ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  /* ---------- core palette ---------- */
+  --ink:          #3F3F3F;
+  --ink-soft:     #5C5C5C;
+  --ink-mute:     #8A8A8A;   /* captions, sources, axis labels */
+  --ink-faint:    #B8B4AC;   /* hairline text on sand */
+  --paper:        #FFFFFF;
+  --sand:         #EBE7DD;
+  --parchment:    #F5F4EE;
+  --sand-deep:    #DCD6C6;   /* sand one step down, for chips and wells */
+
+  /* ---------- Colorado flag ---------- */
+  --gold:         #EE9F36;
+  --gold-bright:  #FFC061;   /* the lit face of the sun, highlights only */
+  --gold-deep:    #C77E1C;   /* gold as type — passes on sand and paper */
+  --gold-ink:     #8A5510;   /* deepest, for numerals on light grounds */
+  --red:          #DC2927;
+  --red-deep:     #A81D1B;
+
+  /* ---------- mountain & sky (from the 150/250 badge) ---------- */
+  --navy:         #24436F;   /* section dividers, dark grounds */
+  --navy-deep:    #16294380; /* unused as colour: see --navy-ink */
+  --navy-ink:     #162943;   /* deepest ground, letterbox and cover */
+  --mountain:     #32719E;
+  --lake:         #005D8A;
+  --sky:          #63A0C4;
+  --sky-pale:     #A9C9DE;
+  --snow:         #E8F0F6;   /* dim type on navy */
+
+  /* ---------- hairlines ---------- */
+  --hairline:        rgba(63, 63, 63, 0.14);
+  --hairline-strong: rgba(63, 63, 63, 0.32);
+  --hairline-gold:   rgba(238, 159, 54, 0.42);
+  --hairline-dark:   rgba(255, 255, 255, 0.18);
+
+  /* ---------- data ramp ----------
+     Five slots, in the order a chart consumes them. Slot 1 is the
+     hero: put the number the room should remember there. Slots 4
+     and 5 are currentColor, which is what lets one chart sit on
+     paper, sand, navy or gold with no per-slide override.
+
+     Six series means the slide is doing too much — split it. */
+  --ch-1: var(--gold);
+  --ch-2: var(--mountain);
+  --ch-3: var(--red);
+  --ch-4: currentColor;
+  --ch-5: color-mix(in srgb, currentColor 38%, transparent);
+
+  /* Sequential ramp, gold → navy, for choropleths and heat scales. */
+  --seq-1: #FBE3BE;
+  --seq-2: #F3C078;
+  --seq-3: #E39A3F;
+  --seq-4: #A9773C;
+  --seq-5: #5D6A6E;
+  --seq-6: #24436F;
+
+  /* Semantic. Used sparingly and never as decoration. */
+  --pos: #4E7A3E;   /* growth, "yes" — a green that sits in the badge's forest */
+  --neg: var(--red);
+  --flat: var(--ink-mute);
+
+  /* ---------- aliases the engine expects ---------- */
+  --f-display: var(--brand-f-display);
+  --f-body:    var(--brand-f-body);
+  --f-slab:    var(--brand-f-slab);
+  --f-mono:    var(--brand-f-mono);
+
+  /* ---------- geometry ----------
+     Sized in cqh/cqw so everything scales with the stage. The
+     margin is the template's: its content boxes start 6.7% in. */
+  --margin:     6.7cqw;
+  --margin-top: 8cqh;
+  --gap:        2.4cqw;
+  --radius:     0;          /* the template is hard-edged; keep it that way */
+}
+
+/* ============================================================
+   GROUNDS
+   A slide picks one. Each sets --ground so components can react
+   to what they are sitting on without knowing the class name.
+   ============================================================ */
+.slide              { background: var(--paper);    color: var(--ink); --ground: light; }
+.slide.g-sand       { background: var(--sand);     color: var(--ink); --ground: light; }
+.slide.g-parchment  { background: var(--parchment);color: var(--ink); --ground: light; }
+.slide.g-navy       { background: var(--navy-ink); color: var(--snow); --ground: dark; }
+.slide.g-mountain   { background: var(--mountain); color: #fff;        --ground: dark; }
+.slide.g-gold       { background: var(--gold);     color: var(--navy-ink); --ground: light; }
+.slide.g-red        { background: var(--red);      color: #fff;        --ground: dark; }
+.slide.g-ink        { background: var(--ink);      color: var(--parchment); --ground: dark; }
+
+/* On dark grounds the muted greys invert, so one component works on both. */
+.slide.g-navy, .slide.g-mountain, .slide.g-red, .slide.g-ink {
+  --ink:        currentColor;
+  --ink-soft:   color-mix(in srgb, currentColor 82%, transparent);
+  --ink-mute:   color-mix(in srgb, currentColor 62%, transparent);
+  --ink-faint:  color-mix(in srgb, currentColor 40%, transparent);
+  --hairline:        rgba(255,255,255,0.18);
+  --hairline-strong: rgba(255,255,255,0.38);
+  --gold-deep:  var(--gold);
+  --gold-ink:   var(--gold-bright);
+}
+
+/* Gold is a light ground, but a loud one: its hairlines need to be
+   the navy ink rather than the default grey. */
+.slide.g-gold {
+  --ink:        var(--navy-ink);
+  --ink-soft:   color-mix(in srgb, var(--navy-ink) 82%, transparent);
+  --ink-mute:   color-mix(in srgb, var(--navy-ink) 58%, transparent);
+  /* --ink-faint is what .source uses. Left at its default pale grey it
+     is invisible on gold, which loses the attribution line entirely. */
+  --ink-faint:  color-mix(in srgb, var(--navy-ink) 42%, transparent);
+  --hairline:        color-mix(in srgb, var(--navy-ink) 22%, transparent);
+  --hairline-strong: color-mix(in srgb, var(--navy-ink) 46%, transparent);
+  --gold-deep:  var(--navy-ink);
+  --gold-ink:   var(--navy-ink);
+  --ch-1: var(--navy-ink); --ch-2: var(--red); --ch-3: var(--mountain);
+}
+
+/* ============================================================
+   LOGO MARKS
+   Three ship with the template: the Governor's Conference lockup,
+   the Colorado Tourism Office wordmark, and the CO150/250 badge.
+   All are dark-on-transparent, so on dark grounds they are
+   knocked out rather than swapped for a second file.
+   ============================================================ */
+.mark img { display: block; width: auto; }
+.mark.xl img { height: 22cqh; }
+.mark.lg img { height: 13cqh; }
+.mark.md img { height: 7cqh; }
+.mark.sm img { height: 4.6cqh; }
+.mark.xs img { height: 3.2cqh; }
+
+/* The lockups are grey type on transparent, so on anything dark they need
+   knocking out to white. `.knock` is an explicit author decision and applies
+   wherever it is written — including over photography, which has no ground
+   class to key off. Scoping it to .g-navy and friends meant a logo on a
+   washed photo silently printed in colour on a bright sky. */
+.mark.knock img { filter: brightness(0) invert(1); }

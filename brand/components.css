@@ -1,0 +1,1084 @@
+/* ============================================================
+   COMPONENT & LAYOUT LIBRARY
+   Colorado Governor's Conference on Tourism
+
+   The supplied template ships five real layouts — title, speakers,
+   headline-and-bullets, separator, thank you — and no components at
+   all. That is not enough to present data with, so this file adds
+   the rest, built from the template's own vocabulary: the sand
+   panel, the tracked all-caps subhead, the hard-edged rules, the
+   gold as the single accent.
+
+   Everything is sized in cqw/cqh against the 16:9 stage, so it
+   scales to any display and prints identically.
+
+   Read this file as two halves:
+     LAYOUTS     l-*   own the whole slide, one per <section>
+     COMPONENTS  everything else, composed inside a layout
+
+   Nothing here names a colour. If you need one, it is a token in
+   colorado.css, or it does not belong in the deck.
+   ============================================================ */
+
+
+/* ════════════════════════════════════════════════════════════
+   0 · SHARED FURNITURE
+   ════════════════════════════════════════════════════════════ */
+
+/* The standard content frame. Most layouts sit inside this. */
+.pad      { padding: var(--margin-top) var(--margin); }
+.pad-tight{ padding: 5cqh var(--margin); }
+.pad-wide { padding: var(--margin-top) 9cqw; }
+
+/* Vertical rhythm helpers — a stack with a consistent gap. */
+.stack    { display: flex; flex-direction: column; }
+.stack-xs { gap: 1cqh; } .stack-sm { gap: 1.8cqh; }
+.stack-md { gap: 3cqh; } .stack-lg { gap: 4.6cqh; }
+.center-y { justify-content: center; }
+.center-x { align-items: center; text-align: center; }
+.push     { margin-top: auto; }
+
+.row { display: flex; align-items: center; gap: var(--gap); }
+.row-between { display: flex; align-items: center; justify-content: space-between; gap: var(--gap); }
+
+/* Column grids. Gap is the token so every grid on every slide agrees. */
+.cols-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--gap); }
+.cols-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap); }
+.cols-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gap); }
+.cols-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: calc(var(--gap) * .8); }
+
+/* Rules. The template is hard-edged: no rounded corners anywhere. */
+.rule       { border: 0; border-top: 2px solid var(--hairline-strong); }
+.rule-gold  { border: 0; border-top: 3px solid var(--gold); width: 7cqw; }
+.rule-thin  { border: 0; border-top: 1px solid var(--hairline); }
+.rule-v     { width: 2px; background: var(--hairline); align-self: stretch; }
+
+/* The source line. Every number on a slide names where it came from. */
+.source {
+  font-family: var(--f-body); font-size: 1.45cqh; line-height: 1.4;
+  color: var(--ink-faint); letter-spacing: 0.02em;
+}
+.source-fixed { position: absolute; left: var(--margin); bottom: 4.4cqh; }
+
+/* Colour utilities — tokens only, never raw hex. */
+.t-gold  { color: var(--gold-deep); }
+.t-mute  { color: var(--ink-mute); }
+.t-soft  { color: var(--ink-soft); }
+.t-red   { color: var(--red); }
+.t-navy  { color: var(--navy); }
+.t-pos   { color: var(--pos); }
+.t-neg   { color: var(--neg); }
+/* An accent phrase inside a headline — the deck's one emphasis device. */
+.acc     { color: var(--gold-deep); }
+.g-navy .acc, .g-ink .acc, .g-mountain .acc, .g-red .acc { color: var(--gold); }
+
+
+/* ════════════════════════════════════════════════════════════
+   1 · MEDIA
+   ════════════════════════════════════════════════════════════ */
+
+.media { position: relative; overflow: hidden; background: var(--sand-deep); }
+.media img, .media video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.media-full { position: absolute; inset: 0; overflow: hidden; }
+.media-full img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Washes. Photography in this deck almost always carries type, and the
+   template's grey ink needs a floor under it to stay legible. */
+.wash::after      { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(22,41,67,.10) 0%, rgba(22,41,67,.72) 100%); }
+.wash-left::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(22,41,67,.86) 0%, rgba(22,41,67,.45) 46%, rgba(22,41,67,0) 78%); }
+.wash-flat::after { content: ""; position: absolute; inset: 0; background: rgba(22,41,67,.58); }
+.wash-sand::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, var(--sand) 0%, color-mix(in srgb, var(--sand) 88%, transparent) 40%, transparent 72%); }
+/* Layer order inside a washed media box, and the reason it is spelled out:
+   the wash is a pseudo-element with z-index auto, so ANY positioned child
+   with a z-index paints above it. Lifting every child — which is what a
+   blanket `.wash > * { z-index: 1 }` does — puts the photograph itself on
+   top of its own overlay, and the wash silently does nothing. It looks
+   fine on a dark photo and fails on a bright one.
+
+     0  the media                 img / video
+     1  the wash                  ::after
+     2  anything else in the box  captions, hotspots, credits            */
+.media-full > *, .media > * { position: relative; z-index: 2; }
+.media-full > img, .media-full > video,
+.media > img, .media > video { z-index: 0; }
+.wash::after, .wash-left::after, .wash-flat::after, .wash-sand::after { z-index: 1; }
+
+/* Placeholder for art that has not arrived yet. Deliberately ugly-honest
+   rather than a grey box you might ship by accident. */
+.media-ph {
+  position: relative; display: grid; place-items: center;
+  background: repeating-linear-gradient(45deg, var(--sand) 0 12px, var(--sand-deep) 12px 24px);
+  border: 1px solid var(--hairline);
+  min-height: 10cqh; text-align: center; padding: 2cqh;
+}
+.media-ph__label {
+  font-family: var(--f-mono); font-size: 1.4cqh; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--ink-mute);
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   2 · COLORADO MOTIFS
+   The two shapes that make this deck read as Colorado rather than
+   as a generic gold-and-grey template. Both are CSS/SVG, so they
+   scale and print without an asset.
+   ════════════════════════════════════════════════════════════ */
+
+/* The flag's "C" — a gold disc inside a red arc. Used as a bullet,
+   a step marker, and the section-number chip. */
+.co-c {
+  position: relative; display: inline-grid; place-items: center;
+  width: 1em; height: 1em; flex: 0 0 auto;
+  border: 0.19em solid var(--red);
+  border-radius: 50%;
+  /* the opening of the C, cut on the right */
+  clip-path: polygon(0 0, 74% 0, 74% 30%, 100% 30%, 100% 70%, 74% 70%, 74% 100%, 0 100%);
+}
+.co-c::after {
+  content: ""; width: 0.46em; height: 0.46em; border-radius: 50%;
+  background: var(--gold);
+}
+.co-c-sm { font-size: 2.4cqh; } .co-c-md { font-size: 4cqh; } .co-c-lg { font-size: 7cqh; }
+
+/* Mountain ridge — a repeating peak silhouette for section dividers and
+   slide feet. No markup and no asset: one conic gradient per tile, so it
+   tints with currentColor and scales to any width.
+
+   A single cone anchored at the top-centre of each tile and swept from
+   135° to 225° is a triangle with its apex at the top and its base on the
+   floor — and because the cone is anchored to the tile, neighbouring peaks
+   meet exactly at the tile edge. Two offset linear-gradients, the more
+   obvious approach, leave a flat gap between every peak.
+
+   The 90° sweep makes a right-angled apex, so each triangle's base is
+   exactly twice the ridge height. The tile has to be that wide too: any
+   narrower and the peaks clip into a sawtooth, any wider and they stand
+   apart as separate triangles. Hence the calc rather than a literal. */
+.ridge {
+  --ridge-h: 5cqh;
+  height: var(--ridge-h); width: 100%;
+  background: conic-gradient(from 135deg at 50% 0, currentColor 0 90deg, transparent 0)
+              0 0 / calc(var(--ridge-h) * 2) 100% repeat-x;
+  opacity: .16;
+}
+.ridge-tall  { --ridge-h: 8cqh; }
+.ridge-short { --ridge-h: 3cqh; }
+.ridge-b { transform: scaleY(-1); }
+
+/* The template's signature sand panel: a centred block on photography. */
+.panel {
+  background: var(--sand);
+  color: var(--ink);
+  padding: 6cqh 5cqw;
+  display: flex; flex-direction: column;
+}
+.panel-parchment { background: var(--parchment); }
+.panel-navy      { background: var(--navy-ink); color: var(--snow); }
+.panel-gold      { background: var(--gold); color: var(--navy-ink); }
+/* A gold hairline at the top of a panel, echoing the C's sun. */
+.panel-top-rule { border-top: 4px solid var(--gold); }
+
+
+/* ════════════════════════════════════════════════════════════
+   3 · LAYOUTS
+   One per slide. Each is a grid or flex frame that owns the whole
+   stage; content components go inside.
+   ════════════════════════════════════════════════════════════ */
+
+/* ---- l-cover ----------------------------------------------
+   The template's title slide: full-bleed photography, a centred
+   sand panel holding the conference lockup and the date line.
+
+   The panel sizes to its CONTENT — no min-height. An earlier version
+   fixed it at 82% of the stage and centred the content inside a
+   `1fr auto auto` grid, which meant an empty row absorbed all the
+   slack at the top and pushed the lockup down onto the gold rule.
+   A tall panel with a small logo stranded at the bottom also covers
+   the part of the photograph worth showing. Content-sized is both
+   better looking and impossible to get wrong. */
+.l-cover { position: relative; display: grid; place-items: center; }
+.l-cover .cover-panel {
+  position: relative; z-index: 1;
+  width: 34%;
+  background: var(--sand);
+  display: flex; flex-direction: column; align-items: center;
+  padding: 7cqh 3.2cqw 5.4cqh;
+  text-align: center;
+}
+/* The lockup is sized off the PANEL, not the stage, so the two always
+   stay in proportion — change the panel width and the logo follows. */
+.l-cover .cover-title { width: 100%; }
+.l-cover .cover-title img { width: 100%; height: auto; display: block; }
+.l-cover .cover-meta {
+  width: 100%;
+  margin-top: 5cqh; padding-top: 2.8cqh;
+  border-top: 2px solid var(--gold);
+  font-family: var(--f-body); font-weight: 400; font-size: 2.1cqh;
+  letter-spacing: 0.04em; color: var(--ink);
+}
+
+/* Wider variants, for a talk title that needs the room. The logo scales
+   with the panel, so nothing else has to change. */
+.l-cover.l-cover-wide  .cover-panel { width: 46%; }
+.l-cover.l-cover-narrow .cover-panel { width: 27%; }
+
+/* ---- l-title ----------------------------------------------
+   Cover without the panel: type straight onto photography. */
+.l-title { position: relative; display: flex; flex-direction: column; justify-content: flex-end; }
+.l-title .title-body { position: relative; z-index: 1; padding: 0 var(--margin) 11cqh; max-width: 76%; }
+
+/* ---- l-section --------------------------------------------
+   The separator. Big number, big word, ridge at the foot. */
+.l-section { position: relative; display: grid; place-items: center; text-align: center; }
+.l-section .sec-inner { position: relative; z-index: 1; padding: 0 var(--margin); }
+.l-section .sec-num {
+  font-family: var(--f-display); font-size: 4cqh; letter-spacing: 0.3em;
+  color: var(--gold); margin-bottom: 2.4cqh;
+}
+.l-section .ridge { position: absolute; left: 0; right: 0; bottom: 0; }
+
+/* ---- l-headline -------------------------------------------
+   Eyebrow, headline, lead paragraph. The workhorse. */
+.l-headline { display: flex; flex-direction: column; justify-content: center; }
+.l-headline .lede { max-width: 62%; }
+
+/* ---- l-bullets --------------------------------------------
+   The template's content slide, rebuilt: headline left, list right. */
+.l-bullets { display: grid; grid-template-columns: 40% 1fr; gap: 5cqw; align-content: center; }
+.l-bullets.l-bullets-stack { grid-template-columns: 1fr; gap: 3cqh; }
+
+/* ---- l-split ----------------------------------------------
+   Content and media, side by side. --split sets the ratio. */
+.l-split { display: grid; grid-template-columns: var(--split, 1fr 1fr); height: 100%; }
+.l-split-40 { --split: 40% 1fr; }
+.l-split-60 { --split: 1fr 40%; }
+.l-split-33 { --split: 33% 1fr; }
+.l-split > .split-pane {
+  position: relative; padding: var(--margin-top) var(--margin);
+  display: flex; flex-direction: column; justify-content: center;
+  min-width: 0;   /* lets long words and charts shrink instead of overflowing */
+}
+.l-split > .split-media { position: relative; overflow: hidden; }
+.l-split > .split-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* When the two panes have different grounds, the seam wants no gap. */
+.split-pane-sand { background: var(--sand); }
+.split-pane-navy { background: var(--navy-ink); color: var(--snow); }
+.split-pane-gold { background: var(--gold); color: var(--navy-ink); }
+
+/* ---- l-chart ----------------------------------------------
+   Headline above, chart filling what is left. The chart gets an
+   explicit height because an SVG in a flex child will otherwise
+   collapse and the engine will skip the draw. */
+.l-chart { display: grid; grid-template-rows: auto 1fr auto; gap: 2.6cqh; }
+.l-chart > figure.chart { min-height: 0; height: 100%; }
+
+/* Chart beside a takeaway: the number on the left, the sentence on
+   the right. Most data slides in a talk are really this shape. */
+.l-chart-split { display: grid; grid-template-columns: 1fr 30%; gap: 4cqw; align-content: center; }
+.l-chart-split .takeaway { display: flex; flex-direction: column; justify-content: center; gap: 2cqh; }
+
+/* ---- l-stat -----------------------------------------------
+   One number, as large as it will go. */
+.l-stat { display: grid; place-items: center; text-align: center; }
+.l-stat .stat-inner { max-width: 80%; }
+
+/* ---- l-grid -----------------------------------------------
+   Any n-up card or stat grid, vertically centred. */
+.l-grid { display: flex; flex-direction: column; justify-content: center; }
+
+/* ---- l-quote ----------------------------------------------- */
+.l-quote { display: grid; place-items: center; }
+.l-quote .quote-inner { max-width: 78%; text-align: center; }
+
+/* ---- l-closer ----------------------------------------------
+   Q&A / thank you. Mirrors the cover so the deck bookends. */
+.l-closer { position: relative; display: grid; place-items: center; text-align: center; }
+.l-closer .closer-inner { position: relative; z-index: 1; }
+
+
+/* ════════════════════════════════════════════════════════════
+   4 · STATS
+   ════════════════════════════════════════════════════════════ */
+
+.stat { display: flex; flex-direction: column; gap: 0.8cqh; }
+.stat__num {
+  font-family: var(--f-display); font-weight: 400;
+  font-size: 9cqh; line-height: 0.9; letter-spacing: 0.01em;
+  color: var(--gold-ink); font-variant-numeric: tabular-nums;
+}
+.stat__num-xl { font-size: 15cqh; }
+.stat__num-sm { font-size: 6cqh; }
+.stat__label {
+  font-family: var(--f-body); font-weight: 600; font-size: 1.9cqh;
+  line-height: 1.35; color: var(--ink-soft);
+}
+.stat__note { font-family: var(--f-body); font-size: 1.6cqh; color: var(--ink-mute); line-height: 1.4; }
+.stat__rule { border: 0; border-top: 3px solid var(--gold); width: 3.4cqw; margin-bottom: 0.4cqh; }
+/* A stat that sits in a grid cell with a rule between neighbours. */
+.stat-grid { display: grid; gap: var(--gap); }
+.stat-grid.ruled > .stat { border-left: 2px solid var(--hairline); padding-left: 1.8cqw; }
+.stat-grid.ruled > .stat:first-child { border-left: 0; padding-left: 0; }
+
+/* Delta chip: the direction of travel next to a number. */
+.delta {
+  display: inline-flex; align-items: center; gap: 0.4em;
+  font-family: var(--f-body); font-weight: 700; font-size: 1.8cqh;
+}
+.delta-up::before   { content: "▲"; font-size: 0.8em; color: var(--pos); }
+.delta-down::before { content: "▼"; font-size: 0.8em; color: var(--neg); }
+.delta-flat::before { content: "■"; font-size: 0.7em; color: var(--flat); }
+.delta-up   { color: var(--pos); }
+.delta-down { color: var(--neg); }
+.delta-flat { color: var(--flat); }
+
+/* KPI tile — a stat in a box, for dashboard-shaped slides. */
+.kpi {
+  background: var(--parchment); border-top: 4px solid var(--gold);
+  padding: 2.6cqh 1.8cqw; display: flex; flex-direction: column; gap: 0.6cqh;
+  min-width: 0;
+}
+.g-navy .kpi, .g-ink .kpi { background: rgba(255,255,255,.07); }
+.kpi__num { font-family: var(--f-display); font-size: 6.4cqh; line-height: .9; color: var(--gold-ink); font-variant-numeric: tabular-nums; }
+.kpi__label { font-family: var(--f-body); font-weight: 600; font-size: 1.7cqh; color: var(--ink-soft); }
+.kpi__spark { height: 4cqh; margin-top: .6cqh; }
+
+
+/* ════════════════════════════════════════════════════════════
+   5 · CARDS, ROWS & LISTS
+   ════════════════════════════════════════════════════════════ */
+
+.card {
+  background: var(--parchment);
+  padding: 3cqh 1.9cqw;
+  display: flex; flex-direction: column; gap: 1.2cqh;
+  min-width: 0;
+}
+.card-sand  { background: var(--sand); }
+.card-navy  { background: var(--navy-ink); color: var(--snow); }
+.card-gold  { background: var(--gold); color: var(--navy-ink); }
+.card-line  { background: transparent; border: 2px solid var(--hairline-strong); }
+.card-top   { border-top: 4px solid var(--gold); }
+.card__num {
+  font-family: var(--f-display); font-size: 3.4cqh; line-height: 1;
+  color: var(--gold-deep); letter-spacing: 0.06em;
+}
+.card__title {
+  font-family: var(--f-display); font-weight: 400; font-size: 3.4cqh;
+  line-height: 1.04; letter-spacing: 0.02em; text-transform: uppercase;
+}
+.card__body { font-family: var(--f-body); font-size: 2cqh; line-height: 1.45; color: var(--ink-soft); }
+.card__foot { margin-top: auto; padding-top: 1.4cqh; font-family: var(--f-mono); font-size: 1.3cqh; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-mute); }
+
+/* Numbered rows — the template's bullet list, given structure. */
+.rows { display: flex; flex-direction: column; }
+.rows__row {
+  display: grid; grid-template-columns: auto 1fr; gap: 1.6cqw;
+  align-items: baseline;
+  padding: 2.1cqh 0; border-top: 1px solid var(--hairline);
+}
+.rows__row:first-child { border-top: 0; padding-top: 0; }
+.rows__num {
+  font-family: var(--f-display); font-size: 3cqh; line-height: 1;
+  color: var(--gold-deep); letter-spacing: .06em; font-variant-numeric: tabular-nums;
+}
+.rows__title { font-family: var(--f-body); font-weight: 700; font-size: 2.3cqh; line-height: 1.3; }
+.rows__body  { font-family: var(--f-body); font-size: 2cqh; line-height: 1.42; color: var(--ink-soft); margin-top: .5cqh; }
+.rows-tight .rows__row { padding: 1.4cqh 0; }
+/* Two-column row: label left, value right. Good for a quick data list. */
+.rows-two .rows__row { grid-template-columns: 1fr auto; }
+.rows-two .rows__val { font-family: var(--f-display); font-size: 3.4cqh; color: var(--gold-ink); font-variant-numeric: tabular-nums; }
+
+/* Bulleted list, in the template's voice: a Colorado C for the marker. */
+.bullets { list-style: none; display: flex; flex-direction: column; gap: 1.8cqh; }
+.bullets li {
+  display: grid; grid-template-columns: auto 1fr; gap: 1.2cqw; align-items: start;
+  font-family: var(--f-body); font-size: 2.3cqh; line-height: 1.42;
+}
+.bullets li::before {
+  content: ""; width: 1.5cqh; height: 1.5cqh; margin-top: .55cqh;
+  border: .34cqh solid var(--red); border-radius: 50%;
+  clip-path: polygon(0 0, 74% 0, 74% 30%, 100% 30%, 100% 70%, 74% 70%, 74% 100%, 0 100%);
+}
+.bullets-plain li::before { border-color: var(--gold); clip-path: none; background: var(--gold); }
+
+/* Chips and pills — categorical tags. */
+.chip-row { display: flex; flex-wrap: wrap; gap: .8cqw; }
+.chip {
+  font-family: var(--f-mono); font-size: 1.35cqh; letter-spacing: .16em;
+  text-transform: uppercase; padding: .8cqh 1cqw;
+  background: var(--sand-deep); color: var(--ink-soft);
+}
+.chip-gold { background: var(--gold); color: var(--navy-ink); }
+.chip-line { background: transparent; border: 1px solid var(--hairline-strong); }
+
+/* Callout — a single sentence the room should carry out of the slide. */
+.callout {
+  border-left: 5px solid var(--gold);
+  padding: 1.4cqh 0 1.4cqh 1.8cqw;
+  font-family: var(--f-body); font-size: 2.5cqh; line-height: 1.4; font-weight: 500;
+}
+.callout-box {
+  border-left: 5px solid var(--gold); background: var(--parchment);
+  padding: 2.4cqh 2cqw;
+}
+.g-navy .callout-box, .g-ink .callout-box { background: rgba(255,255,255,.07); }
+
+
+/* ════════════════════════════════════════════════════════════
+   6 · COMPARISON, TABLE & MATRIX
+   ════════════════════════════════════════════════════════════ */
+
+/* Two-column "this vs that". */
+.vs { display: grid; grid-template-columns: 1fr auto 1fr; gap: 2.4cqw; align-items: start; }
+.vs__col { display: flex; flex-direction: column; gap: 1.6cqh; min-width: 0; }
+.vs__head {
+  font-family: var(--f-display); font-size: 3.8cqh; letter-spacing: .02em;
+  text-transform: uppercase; padding-bottom: 1.2cqh; border-bottom: 3px solid var(--hairline-strong);
+}
+.vs__col-a .vs__head { border-bottom-color: var(--ink-mute); }
+.vs__col-b .vs__head { border-bottom-color: var(--gold); color: var(--gold-deep); }
+.vs__list { list-style: none; display: flex; flex-direction: column; gap: 1.4cqh; }
+.vs__list li {
+  display: grid; grid-template-columns: auto 1fr; gap: 1cqw; align-items: start;
+  font-family: var(--f-body); font-size: 2.05cqh; line-height: 1.4;
+}
+.vs__list li::before { content: "—"; color: var(--ink-mute); }
+.vs__list-yes li::before { content: "✓"; color: var(--pos); font-weight: 700; }
+.vs__list-no  li::before { content: "✕"; color: var(--neg); font-weight: 700; }
+.vs__div { align-self: stretch; width: 2px; background: var(--hairline); }
+
+/* Data table. Quiet by default: the numbers should carry it. */
+.qtable { width: 100%; border-collapse: collapse; font-family: var(--f-body); }
+.qtable th {
+  text-align: left; font-size: 1.5cqh; font-weight: 700; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--ink-mute);
+  padding: 0 1.2cqw 1.2cqh 0; border-bottom: 2px solid var(--hairline-strong);
+}
+.qtable td {
+  font-size: 2.05cqh; padding: 1.5cqh 1.2cqw 1.5cqh 0;
+  border-bottom: 1px solid var(--hairline); vertical-align: baseline;
+}
+.qtable th:last-child, .qtable td:last-child { padding-right: 0; }
+.qtable .num { text-align: right; font-variant-numeric: tabular-nums; font-family: var(--f-display); font-size: 2.6cqh; }
+.qtable tr.is-hero td { background: color-mix(in srgb, var(--gold) 16%, transparent); font-weight: 700; }
+.qtable tr.is-hero td:first-child { box-shadow: inset 5px 0 0 var(--gold); padding-left: 1cqw; }
+.qtable-tight td { padding: 1cqh 1.2cqw 1cqh 0; }
+
+/* 2×2 matrix — positioning, quadrants, competitive maps. */
+.matrix {
+  position: relative; aspect-ratio: 1.35 / 1; width: 100%;
+  border-left: 2px solid var(--hairline-strong); border-bottom: 2px solid var(--hairline-strong);
+}
+.matrix::before, .matrix::after {
+  content: ""; position: absolute; background: var(--hairline);
+}
+.matrix::before { left: 50%; top: 0; bottom: 0; width: 1px; }
+.matrix::after  { top: 50%; left: 0; right: 0; height: 1px; }
+.matrix__pt {
+  position: absolute; transform: translate(-50%, 50%);
+  left: calc(var(--x) * 1%); bottom: calc(var(--y) * 1%);
+  display: flex; align-items: center; gap: .6cqw;
+  font-family: var(--f-body); font-size: 1.8cqh; font-weight: 600; white-space: nowrap;
+}
+.matrix__pt::before {
+  content: ""; width: 1.5cqh; height: 1.5cqh; border-radius: 50%;
+  background: var(--ink-mute); flex: 0 0 auto;
+}
+.matrix__pt-us::before { background: var(--gold); width: 2.2cqh; height: 2.2cqh; }
+.matrix__pt-us { font-weight: 700; color: var(--gold-ink); }
+.matrix__axis {
+  position: absolute; font-family: var(--f-mono); font-size: 1.3cqh;
+  letter-spacing: .18em; text-transform: uppercase; color: var(--ink-mute);
+}
+.matrix__axis-x { bottom: -3.4cqh; left: 50%; transform: translateX(-50%); }
+.matrix__axis-y { left: -2.2cqh; top: 50%; transform: translateY(-50%) rotate(-90deg); transform-origin: center; }
+
+
+/* ════════════════════════════════════════════════════════════
+   7 · TIMELINE & PROCESS
+   ════════════════════════════════════════════════════════════ */
+
+.tl { position: relative; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 0; }
+.tl::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 2.1cqh;
+  height: 2px; background: var(--hairline-strong);
+}
+.tl__node { position: relative; padding-top: 5.4cqh; padding-right: 1.4cqw; }
+.tl__node::before {
+  content: ""; position: absolute; top: 1.35cqh; left: 0;
+  width: 1.6cqh; height: 1.6cqh; border-radius: 50%;
+  background: var(--gold); box-shadow: 0 0 0 .6cqh var(--paper);
+}
+.g-sand .tl__node::before      { box-shadow: 0 0 0 .6cqh var(--sand); }
+.g-parchment .tl__node::before { box-shadow: 0 0 0 .6cqh var(--parchment); }
+.g-navy .tl__node::before      { box-shadow: 0 0 0 .6cqh var(--navy-ink); }
+.tl__date {
+  font-family: var(--f-mono); font-size: 1.35cqh; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--gold-deep); margin-bottom: .8cqh;
+}
+.tl__label { font-family: var(--f-display); font-size: 3cqh; line-height: 1.05; text-transform: uppercase; letter-spacing: .02em; }
+.tl__body  { font-family: var(--f-body); font-size: 1.85cqh; line-height: 1.4; color: var(--ink-soft); margin-top: .8cqh; }
+
+/* Vertical timeline, when there are more than five moments. */
+.tl-v { display: flex; flex-direction: column; position: relative; }
+.tl-v::before { content: ""; position: absolute; left: .75cqh; top: 0; bottom: 0; width: 2px; background: var(--hairline-strong); }
+.tl-v .tl__node { padding: 0 0 2.6cqh 3cqw; }
+.tl-v .tl__node::before { top: .3cqh; left: 0; }
+
+/* Numbered process — steps with a connector.
+   The arrow sits at the MIDPOINT of the gap, which is why --step-gap is a
+   variable used by both the grid and the offset: hard-coding the offset
+   larger than half the gap walks the arrow into the next step's number
+   chip, and the two overlap. */
+.process {
+  --step-gap: 1.6cqw;
+  display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: var(--step-gap);
+}
+.process__step { display: flex; flex-direction: column; gap: 1.2cqh; position: relative; min-width: 0; }
+.process__step::after {
+  content: "→"; position: absolute; right: calc(var(--step-gap) / -2); top: 1.6cqh;
+  transform: translateX(50%); color: var(--gold); font-size: 2.4cqh; line-height: 1;
+}
+.process__step:last-child::after { display: none; }
+.process__n {
+  width: 4.4cqh; height: 4.4cqh; flex: 0 0 auto;
+  display: grid; place-items: center;
+  background: var(--gold); color: var(--navy-ink);
+  font-family: var(--f-display); font-size: 2.6cqh; line-height: 1;
+}
+.process__title { font-family: var(--f-display); font-size: 2.9cqh; line-height: 1.05; text-transform: uppercase; letter-spacing: .02em; }
+.process__body  { font-family: var(--f-body); font-size: 1.85cqh; line-height: 1.42; color: var(--ink-soft); }
+
+
+/* ════════════════════════════════════════════════════════════
+   8 · QUOTES, SPEAKERS & LOGOS
+   ════════════════════════════════════════════════════════════ */
+
+.quote__text {
+  font-family: var(--f-slab); font-weight: 300; font-style: normal;
+  font-size: 5cqh; line-height: 1.24; letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+.quote__text::before { content: "\201C"; }
+.quote__text::after  { content: "\201D"; }
+.quote__cite {
+  font-family: var(--f-mono); font-size: 1.5cqh; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--ink-mute); margin-top: 3cqh;
+}
+.quote-sm .quote__text { font-size: 3.4cqh; }
+
+/* Speaker card — the template's slides 2–4, one component. */
+.speaker { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 1.6cqh; }
+.speaker__photo {
+  width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block;
+  background: var(--sand-deep);
+  /* a circular crop, as the template's speaker slides use */
+  border-radius: 50%;
+}
+.speaker__photo-sq { border-radius: 0; aspect-ratio: 4 / 5; }
+.speaker__name { font-family: var(--f-display); font-size: 3.6cqh; line-height: 1; text-transform: uppercase; letter-spacing: .03em; }
+.speaker__title { font-family: var(--f-body); font-size: 1.85cqh; line-height: 1.35; color: var(--ink-soft); }
+.speaker__org { font-family: var(--f-mono); font-size: 1.35cqh; letter-spacing: .18em; text-transform: uppercase; color: var(--gold-deep); }
+.speakers-1 { display: grid; grid-template-columns: minmax(0, 28%); justify-content: center; }
+.speakers-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 26%)); justify-content: center; gap: 5cqw; }
+.speakers-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 22%)); justify-content: center; gap: 4cqw; }
+
+/* Logo wall. Marks are greyed to a common weight so no one brand
+   shouts over the others; the hero mark opts out with .logo-cell-hero. */
+.logos { display: grid; gap: var(--gap); align-items: center; }
+.logos-4 { grid-template-columns: repeat(4, 1fr); }
+.logos-5 { grid-template-columns: repeat(5, 1fr); }
+.logos-6 { grid-template-columns: repeat(6, 1fr); }
+.logo-cell { display: grid; place-items: center; padding: 1.6cqh 1cqw; min-width: 0; }
+.logo-cell img { max-width: 100%; max-height: 7cqh; width: auto; object-fit: contain; filter: grayscale(1); opacity: .62; }
+.logo-cell-hero img { filter: none; opacity: 1; }
+
+
+/* ════════════════════════════════════════════════════════════
+   9 · INTERACTIVE
+   Click-to-reveal pieces. Each is inert in print (see deck.css)
+   and each stops the click from also advancing the deck.
+   ════════════════════════════════════════════════════════════ */
+
+/* Flip card — question on the front, answer on the back. */
+.flip { perspective: 1400px; cursor: pointer; min-width: 0; }
+.flip__inner {
+  position: relative; width: 100%; height: 100%;
+  transition: transform .68s cubic-bezier(.2,.7,.2,1); transform-style: preserve-3d;
+}
+.flip.is-flipped .flip__inner { transform: rotateY(180deg); }
+.flip__front, .flip__back {
+  position: absolute; inset: 0; backface-visibility: hidden;
+  display: flex; flex-direction: column; justify-content: center; gap: 1.2cqh;
+  padding: 2.6cqh 1.8cqw;
+}
+.flip__front { background: var(--parchment); border-top: 4px solid var(--gold); }
+.flip__back  { background: var(--navy-ink); color: var(--snow); transform: rotateY(180deg); }
+.flip__hint {
+  position: absolute; right: 1.2cqw; bottom: 1.2cqh;
+  font-family: var(--f-mono); font-size: 1.2cqh; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--ink-mute);
+}
+
+/* Hotspot — a dot on an image that opens a note. */
+.hot-wrap { position: relative; }
+.hot {
+  position: absolute; left: calc(var(--x) * 1%); top: calc(var(--y) * 1%);
+  transform: translate(-50%, -50%); cursor: pointer; z-index: 2;
+}
+.hot__dot {
+  width: 2.4cqh; height: 2.4cqh; border-radius: 50%;
+  background: var(--gold); border: .35cqh solid var(--paper);
+  display: block; position: relative;
+}
+.hot__dot::after {
+  content: ""; position: absolute; inset: -.35cqh; border-radius: 50%;
+  border: .28cqh solid var(--gold); animation: hot-pulse 2.4s ease-out infinite;
+}
+@keyframes hot-pulse { 0% { transform: scale(1); opacity: .9; } 100% { transform: scale(2.1); opacity: 0; } }
+.hot__card {
+  position: absolute; left: 3cqh; top: 50%; transform: translateY(-50%);
+  width: 22cqw; background: var(--navy-ink); color: var(--snow);
+  padding: 1.8cqh 1.4cqw; font-family: var(--f-body); font-size: 1.8cqh; line-height: 1.4;
+  opacity: 0; visibility: hidden; transition: opacity .3s, visibility .3s;
+}
+.hot.is-open .hot__card { opacity: 1; visibility: visible; }
+.hot-left .hot__card { left: auto; right: 3cqh; }
+
+/* Tabs — parallel content on one slide, when a build would be wrong. */
+.tabs { display: grid; grid-template-columns: 26% 1fr; gap: 3cqw; }
+.tabs__rail { display: flex; flex-direction: column; }
+.tabs__tab {
+  text-align: left; cursor: pointer; background: none; border: 0;
+  border-left: 3px solid transparent; padding: 1.8cqh 1.2cqw;
+  font-family: var(--f-display); font-size: 2.6cqh; line-height: 1.1;
+  text-transform: uppercase; letter-spacing: .02em; color: var(--ink-mute);
+  transition: color .2s, border-color .2s, background .2s;
+}
+.tabs__tab:hover { color: var(--ink-soft); }
+.tabs__tab.is-on { color: var(--ink); border-left-color: var(--gold); background: var(--parchment); }
+.g-navy .tabs__tab.is-on { background: rgba(255,255,255,.07); }
+.tabs__panel { display: none; }
+.tabs__panel.is-on { display: block; }
+
+@media print {
+  /* Every panel prints, so nothing is lost from the PDF — but stacking them
+     is not an option: three full-height panels are several times taller than
+     one page, and the overflow silently pushes the headline off the top.
+     They go side by side instead, auto-sized to however many there are.
+
+     The rail is dropped with them, so a printed panel has no tab name on it.
+     Give each panel's content its own label — a chart series name does the
+     job — or the reader cannot tell the columns apart. */
+  .tabs { grid-template-columns: 1fr !important; }
+  .tabs__rail { display: none !important; }
+  .tabs__panels {
+    display: grid !important;
+    grid-auto-flow: column; grid-auto-columns: 1fr;
+    gap: 2cqw; align-items: start;
+  }
+  .tabs__panel { display: block !important; page-break-inside: avoid; min-width: 0; }
+  .hot__card { opacity: 1 !important; visibility: visible !important; position: static; transform: none; width: auto; }
+  .hot__dot::after { animation: none !important; }
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   10 · TEMPLATE LAYOUTS
+   Rebuilt from the two follow-up files the conference supplied:
+
+     separator slides.pptx   ten photo separators, one design
+     Simple slides.pptx      sand content slides, with and without
+                             a photo filling the right half
+
+   These are the template's own voice, and it is not the voice of
+   the layouts above: headlines are Helvetica Neue BOLD in sentence
+   case, with a LIGHT all-caps subhead UNDER them, not a Bebas
+   headline with an eyebrow over it. Every measurement below is read
+   out of the slide XML and converted — x/width to cqw, y/height and
+   point sizes to cqh (a 7.5in slide is 540pt tall, so 1pt = 0.185cqh).
+
+   Every slide in both files carries the horizontal conference lockup
+   bottom-right. That is .foot-mark, and it is why the HUD slide
+   counter no longer sits in that corner.
+   ════════════════════════════════════════════════════════════ */
+
+/* ---- The footer lockup ---------------------------------------
+   x 83%, y 91.3%, w 14.2%, h 6.8% in every source slide. Two files:
+   grey type for sand and paper, white type for anywhere it sits on
+   photography. The PNGs are pre-cropped to the template's crop, so
+   height alone places it exactly. */
+.foot-mark {
+  position: absolute; right: 2.8cqw; bottom: 1.9cqh; z-index: 4;
+  height: 6.8cqh; width: auto; display: block;
+  pointer-events: none;
+}
+
+/* ---- Template type -------------------------------------------
+   Headline 34pt bold, subhead 22pt light caps, body 22pt. Sizes are
+   the template's for the headline; subhead and body are taken down a
+   step (3.6 / 3.2cqh against 4.07) because PowerPoint's 22pt suits
+   "Bulleted list goes here" and not a real sentence — at the full
+   size a 42%-wide column holds about 35 characters a line. */
+.t-head {
+  font-family: var(--f-body); font-weight: 700;
+  font-size: 6.3cqh; line-height: 1.08; letter-spacing: -0.005em;
+  color: var(--ink); text-wrap: balance;
+}
+.t-sub {
+  font-family: var(--f-body); font-weight: 300;
+  font-size: 3.6cqh; line-height: 1.15; letter-spacing: 0.03em;
+  text-transform: uppercase; color: var(--ink);
+}
+.t-body { font-family: var(--f-body); font-weight: 400; font-size: 3.2cqh; line-height: 1.34; color: var(--ink); }
+.t-body p + p { margin-top: 1.85cqh; }
+
+/* The template's bullet: a plain ● in ink, full text size, hanging
+   0.25in (1.875cqw), 90% leading, 10pt (1.85cqh) before each item. */
+.t-bullets { list-style: none; display: flex; flex-direction: column; gap: 1.85cqh; }
+.t-bullets li {
+  position: relative; padding-left: 1.875cqw;
+  font-family: var(--f-body); font-size: 3.2cqh; line-height: 1.22; color: var(--ink);
+}
+.t-bullets li::before {
+  content: "●"; position: absolute; left: 0; top: 0;
+  font-size: 0.78em; line-height: 1.56;   /* optically centred on the first line */
+  color: var(--ink);
+}
+.t-bullets-gold li::before { color: var(--gold); }
+/* Two columns. It has to drop back to display:block — multi-column
+   layout does nothing on a flex container, and .t-bullets is one, so
+   without this every item stacks in the first column. Spacing moves
+   from `gap` to a bottom margin, which falls harmlessly at the foot of
+   each column rather than opening a hole at the top of the second. */
+.t-bullets.t-cols-2 { display: block; column-count: 2; column-gap: 4cqw; }
+.t-bullets.t-cols-2 li { break-inside: avoid; margin-bottom: 1.85cqh; }
+
+
+/* ---- l-sep · photo separator ---------------------------------
+   Full-bleed photograph; a charcoal tab that runs off the left edge
+   with the title in white; the white lockup bottom-right.
+
+   Template tab: x 0, y 10.1%, w 39%, h 15.2%, #3F3F3F, one rounded
+   corner (round1Rect — the top-right), radius 16.667% of its height,
+   38pt Helvetica Neue Bold, centred.
+
+   The one departure is that the tab SIZES TO ITS TITLE. The source is
+   a fixed 39% box sized for the words "Separator Slide"; here 39% is
+   the minimum, and a longer title widens the tab up to 70% of the
+   slide and then wraps, balanced, onto a second line. */
+.l-sep { overflow: hidden; }
+.l-sep .sep-tab {
+  position: absolute; left: 0; top: 10.1%; z-index: 3;
+  min-width: 39%; max-width: 70%; min-height: 15.2%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 1.8cqh 3.4cqw 1.8cqh 4cqw;
+  background: var(--brand-ink);          /* #3F3F3F — never re-mapped by a ground */
+  color: #fff;
+  border-top-right-radius: 2.53cqh;
+  font-family: var(--f-body); font-weight: 700;
+  font-size: 7.04cqh; line-height: 1.06; letter-spacing: -0.01em;
+  text-align: center; text-wrap: balance;
+}
+/* Very long titles: drop a size rather than run to three lines. */
+.l-sep .sep-tab.sep-tab-sm { font-size: 5.4cqh; }
+
+/* Optional section number over the title — an addition, not in the
+   source. Small enough that the tab still reads as the template's. */
+.sep-kicker {
+  display: block; margin-bottom: 0.9cqh;
+  font-family: var(--f-slab); font-weight: 500; font-size: 1.7cqh;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold);
+}
+
+/* A soft shade under the white lockup. Not in the template, which
+   relies on every photo being dark bottom-right — true of the ten it
+   ships, not of whatever gets swapped in later. Faint enough that on
+   a dark corner it is invisible. */
+.l-sep::after {
+  content: ""; position: absolute; right: 0; bottom: 0; z-index: 2;
+  width: 34%; height: 26%; pointer-events: none;
+  background: radial-gradient(ellipse at 100% 100%, rgba(22,41,67,.42) 0%, rgba(22,41,67,0) 70%);
+}
+
+/* A separator at thumbnail size, for choosing a photo. Making the
+   thumbnail a size container is what lets the real .l-sep rules — all
+   in cqh — draw a correct miniature with no separate styles. */
+.sep-mini {
+  position: relative; aspect-ratio: 16 / 9; overflow: hidden;
+  container-type: size;
+}
+.sep-mini > .l-sep { position: absolute; inset: 0; }
+.sep-mini-cap {
+  margin-top: 0.8cqh; font-family: var(--f-mono); font-size: 1.25cqh;
+  letter-spacing: 0.08em; color: var(--ink-mute);
+}
+
+
+/* ---- l-simple · headline, subhead, body ----------------------
+   Template: headline box x 3.9% → 83%, bottom-anchored at y 19.1%;
+   subhead 19.1% → 25.9%; body from y 31.5%, to 83% across.
+
+   The header is pinned by its BOTTOM edge, as the source anchors it,
+   so a two-line headline grows upward and the body always starts at
+   the same height. Text insets of 0.1in are folded into the left
+   edge, which is why it is 4.6cqw rather than 3.9. */
+.l-simple { --t-left: 4.6cqw; --t-right: 17.4cqw; }
+.l-simple .simple-head {
+  position: absolute; left: var(--t-left); right: var(--t-right);
+  bottom: 74.1%;                         /* = subhead bottom at 25.9% */
+  display: flex; flex-direction: column; gap: 0.9cqh;
+}
+.l-simple .simple-body {
+  position: absolute; left: var(--t-left); right: var(--t-right);
+  top: 31.5%; bottom: 10cqh;             /* stops short of the lockup */
+  min-height: 0;
+  /* Height comes from top+bottom, never from a percentage. .body-split
+     carries `height: 100%` for when it is an inner div, and if that lands
+     on this element it resolves against the SLIDE rather than this region:
+     the body becomes a full slide tall starting a third of the way down,
+     and every chart in it runs off the bottom edge. */
+  height: auto;
+}
+/* A chart or grid in the body gets the full height of the region. */
+.l-simple .simple-body > figure.chart { height: 100%; min-height: 0; }
+
+
+/* ---- l-aside · text left, photo right ------------------------
+   Template: text x 3.9% → 46.2%, photo x 50% → 100% at full bleed
+   height. The lockup sits on the photo, so it is the white one.
+   .l-aside-left mirrors it: photo left, text right, grey lockup on
+   sand. */
+.l-aside { --t-left: 4.6cqw; --t-right: 53.8cqw; }
+.l-aside .aside-media { position: absolute; top: 0; bottom: 0; right: 0; width: 50%; overflow: hidden; }
+.l-aside .aside-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* The same faint shade the separator uses under its white lockup, for
+   the same reason: on a bright corner — the horseback photo's dusty
+   trail is one — white type on the photo all but disappears. The mirrored
+   version puts the lockup on sand, so it gets none. */
+.l-aside:not(.l-aside-left) .aside-media::after {
+  content: ""; position: absolute; right: 0; bottom: 0;
+  width: 68%; height: 26%; pointer-events: none;
+  background: radial-gradient(ellipse at 100% 100%, rgba(22,41,67,.42) 0%, rgba(22,41,67,0) 70%);
+}
+.l-aside .simple-head {
+  position: absolute; left: var(--t-left); right: var(--t-right); bottom: 74.1%;
+  display: flex; flex-direction: column; gap: 0.9cqh;
+}
+.l-aside .simple-body {
+  position: absolute; left: var(--t-left); right: var(--t-right); top: 31.5%; bottom: 6.8%;
+  min-height: 0; height: auto;           /* see the note on .l-simple .simple-body */
+}
+.l-aside.l-aside-left { --t-left: 54.6cqw; --t-right: 4.6cqw; }
+.l-aside.l-aside-left .aside-media { right: auto; left: 0; }
+.l-aside.l-aside-left .simple-body { bottom: 10cqh; }   /* clear the lockup, now on sand */
+
+/* A stat in place of the bullets — the aside's most common data use. */
+.aside-stat .stat__num { font-family: var(--f-body); font-weight: 700; font-size: 14cqh; line-height: 0.92; letter-spacing: -0.02em; color: var(--gold-ink); }
+.aside-stat .stat__label { font-size: 3cqh; font-weight: 300; text-transform: uppercase; letter-spacing: 0.03em; color: var(--ink); margin-top: 1cqh; }
+.aside-stat .t-body { margin-top: 3cqh; }
+
+
+/* ---- Photo strip · three images with captions ----------------- */
+.photo-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.6cqw; height: 100%; }
+.photo-strip figure { display: flex; flex-direction: column; gap: 1.2cqh; min-height: 0; margin: 0; }
+.photo-strip .media { flex: 1; min-height: 0; }
+.photo-strip figcaption { font-family: var(--f-body); font-size: 2.1cqh; line-height: 1.35; color: var(--ink); }
+.photo-strip figcaption b { display: block; font-weight: 700; font-size: 2.4cqh; margin-bottom: 0.3cqh; }
+
+@media print {
+  /* The tab's wipe is a clip-path; deck.css already clears clip-path on
+     .fx for print, so the tab prints whole with no rule needed here. */
+  .sep-mini { break-inside: avoid; }
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   11 · DECK-SPECIFIC COMPONENTS
+   Built for "Marketing to Your Most Important Ambassador: AI".
+   Each exists because a slide in that deck needs a shape the
+   library did not already have.
+   ════════════════════════════════════════════════════════════ */
+
+/* Split the body region of an l-simple slide. The workhorse of this
+   deck: a chart or diagram on the left, the number or takeaway right. */
+.body-split    { display: grid; grid-template-columns: 1fr 30%; gap: 3.4cqw; align-items: stretch; height: 100%; min-height: 0; }
+/* A chart needs a DEFINITE height or it runs off the slide. Left to itself
+   the figure is auto-height, the SVG inside asks for 100% of that auto
+   height, and the viewBox the engine measured then gives the SVG an
+   intrinsic aspect ratio that grows it to fit its own width. The column
+   stretches, so 100% here resolves against the body region. */
+.body-split figure.chart { height: 100%; min-height: 0; }
+.body-split-40 { grid-template-columns: 40% 1fr; }
+.body-split-50 { grid-template-columns: 1fr 1fr; }
+.body-split-60 { grid-template-columns: 1fr 40%; }
+.body-split > * { min-width: 0; min-height: 0; }
+.body-split-mid { align-items: center; }
+
+/* The source line. Bottom-left, clear of both the HUD and the lockup. */
+.t-source {
+  position: absolute; left: 4.6cqw; right: 26cqw; bottom: 4.2cqh;
+  font-family: var(--f-body); font-size: 1.5cqh; line-height: 1.35;
+  color: var(--ink-faint);
+}
+
+/* A statement slide: one thought, as large as it will go, in the
+   template's Helvetica rather than the Bebas display face. */
+.t-statement    { font-family: var(--f-body); font-weight: 700; font-size: 9cqh; line-height: 1.06; letter-spacing: -0.015em; text-wrap: balance; }
+.t-statement-sm { font-size: 6.4cqh; }
+.t-statement-lg { font-size: 12cqh; }
+
+/* ---- Fan-out diagram (slide 12) ------------------------------
+   One question on the left, the searches the model actually runs on
+   the right. Drawn with a spine and ticks rather than curves: it
+   survives any number of rows, needs no measurement, and prints. */
+.fanout { display: grid; grid-template-columns: 34% 1fr; gap: 6cqw; align-items: center; height: 100%; }
+.fanout__q {
+  position: relative;
+  background: var(--navy-ink); color: var(--snow);
+  padding: 3cqh 1.8cqw;
+  font-family: var(--f-body); font-weight: 700; font-size: 2.8cqh; line-height: 1.24;
+}
+/* the lead line from the question across to the spine */
+.fanout__q::after {
+  content: ""; position: absolute; left: 100%; top: 50%;
+  width: 6cqw; height: 2px; background: var(--hairline-strong);
+}
+.fanout__list { position: relative; display: flex; flex-direction: column; gap: 1cqh; }
+.fanout__list::before {
+  content: ""; position: absolute; left: 0; top: 2.2cqh; bottom: 2.2cqh;
+  width: 2px; background: var(--hairline-strong);
+}
+.fanout__item {
+  position: relative; margin-left: 3.4cqw;
+  padding: 1cqh 1.2cqw;
+  background: var(--parchment); border-left: 3px solid var(--gold);
+  font-family: var(--f-mono); font-size: 1.85cqh; line-height: 1.2; color: var(--ink-soft);
+}
+.fanout__item::before {
+  content: ""; position: absolute; left: -3.4cqw; top: 50%;
+  width: 3.4cqw; height: 2px; background: var(--hairline-strong);
+}
+.g-navy .fanout__item, .g-ink .fanout__item { background: rgba(255,255,255,.07); }
+.g-navy .fanout__q, .g-ink .fanout__q { background: var(--gold); color: var(--navy-ink); }
+
+/* ---- Concentric rings (slide 30) -----------------------------
+   Filled discs rather than outlined rings: a label sitting on a
+   border needs a background patch to break the line, and that patch
+   has to know the slide's ground. Discs avoid the problem. */
+.rings { position: relative; aspect-ratio: 1 / 1; height: 100%; margin-inline: auto; }
+.rings__ring {
+  position: absolute; border-radius: 50%;
+  display: flex; align-items: flex-start; justify-content: center;
+  padding-top: 2.2cqh;
+  font-family: var(--f-body); font-weight: 700; font-size: 2cqh;
+  letter-spacing: 0.02em; text-align: center;
+}
+.rings__ring-3 { inset: 0;   background: var(--sand-deep); color: var(--ink-soft); }
+.rings__ring-2 { inset: 19%; background: color-mix(in srgb, var(--gold) 42%, var(--parchment)); color: var(--ink); }
+.rings__ring-1 {
+  inset: 38%; background: var(--gold); color: var(--navy-ink);
+  align-items: center; padding-top: 0; font-size: 3cqh;
+}
+
+/* ---- Before / after pair (slide 16) --------------------------- */
+.arrow-pair { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 2.6cqw; text-align: center; }
+.arrow-pair__n { font-family: var(--f-display); font-weight: 400; font-size: 17cqh; line-height: 0.88; letter-spacing: 0.01em; color: var(--gold-ink); font-variant-numeric: tabular-nums; }
+.arrow-pair__lab { font-family: var(--f-body); font-size: 2.05cqh; line-height: 1.35; color: var(--ink-soft); margin-top: 1cqh; }
+.arrow-pair__arrow { font-family: var(--f-body); font-weight: 300; font-size: 7cqh; line-height: 1; color: var(--gold); }
+.g-navy .arrow-pair__n, .g-ink .arrow-pair__n { color: var(--gold); }
+
+/* ---- Paragraph illustration (slide 7) ------------------------- */
+.para-box { border: 2px solid var(--hairline-strong); padding: 2.6cqh 1.8cqw; display: flex; flex-direction: column; gap: 1.2cqh; }
+.para-box i { display: block; height: 1.15cqh; background: var(--hairline); }
+.para-box i:nth-child(4) { width: 88%; }
+.para-box i:last-child  { width: 54%; }
+.para-cap { margin-top: 1.2cqh; font-family: var(--f-mono); font-size: 1.4cqh; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-mute); text-align: center; }
+
+/* ---- Two-column "memory / search" cards (slide 10) ------------ */
+.memo-card { background: var(--parchment); border-top: 4px solid var(--gold); padding: 2.6cqh 1.6cqw; }
+.g-navy .memo-card, .g-ink .memo-card { background: rgba(255,255,255,.07); }
+/* The two words are the point of the slide, so they carry it: large,
+   bold and gold rather than a small tracked label over the body copy. */
+.memo-card__k {
+  font-family: var(--f-body); font-weight: 700; font-size: 5.2cqh;
+  line-height: 1; letter-spacing: -0.01em; text-transform: uppercase;
+  color: var(--gold-deep); margin-bottom: 1.4cqh;
+}
+.memo-card__b { font-family: var(--f-body); font-size: 2.5cqh; line-height: 1.3; }
+
+/* ---- Stat helpers used across this deck ---------------------- */
+.t-stat     { font-family: var(--f-display); font-weight: 400; line-height: 0.9; letter-spacing: 0.01em; color: var(--gold-ink); font-variant-numeric: tabular-nums; }
+.t-stat-xl  { font-size: 22cqh; }
+.t-stat-lg  { font-size: 15cqh; }
+.t-stat-md  { font-size: 9.5cqh; }
+.t-stat-sm  { font-size: 6.4cqh; }
+.t-stat-cap { font-family: var(--f-body); font-size: 2.05cqh; line-height: 1.34; color: var(--ink-soft); margin-top: 0.8cqh; }
+.g-navy .t-stat, .g-ink .t-stat, .g-mountain .t-stat { color: var(--gold); }
+.g-gold .t-stat { color: var(--navy-ink); }
+
+/* Centre a short body vertically in its region. The body is top-aligned by
+   default because most slides lead with a chart; a slide whose content is
+   half the height of the region looks dropped without this. */
+.body-mid { display: flex; flex-direction: column; justify-content: center; }
+
+
+/* ---- LLM platform marks --------------------------------------
+   The real logos, used wherever a platform is named so the slide
+   reads as genuine rather than as a list of words. They are the
+   vendors' own SVGs and keep their own colours, so they are never
+   recoloured to the brand palette. */
+.llm-icon {
+  display: inline-block; vertical-align: -0.18em;
+  width: 1em; height: 1em; margin-right: 0.42em; flex: 0 0 auto;
+}
+.llm-row { display: flex; flex-wrap: wrap; align-items: center; gap: 1.6cqw 2.2cqw; }
+.llm-chip {
+  display: inline-flex; align-items: center;
+  font-family: var(--f-body); font-weight: 600; font-size: 2.4cqh;
+  letter-spacing: 0.01em;
+}
+.llm-chip .llm-icon { width: 1.15em; height: 1.15em; }
+/* On dark grounds the two monochrome marks (ChatGPT, Grok) are black
+   on black, so they alone are knocked out. */
+.g-navy .llm-icon-mono, .g-ink .llm-icon-mono, .l-sep .llm-icon-mono,
+.l-closer .llm-icon-mono { filter: brightness(0) invert(1); }
+
+/* ---- Numbered statement list (slide 6) ----------------------- */
+.num-lines { display: flex; flex-direction: column; gap: 2.2cqh; }
+.num-lines > li { display: grid; grid-template-columns: 1.5em 1fr; align-items: baseline; }
+.num-lines__n {
+  font-family: var(--f-body); font-weight: 700; color: var(--gold);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Stacked comparison cards (slide 18) --------------------- */
+.cmp-card { background: var(--parchment); border-top: 4px solid var(--gold); padding: 2.2cqh 1.5cqw; }
+.g-navy .cmp-card, .g-ink .cmp-card { background: rgba(255,255,255,.07); }
+.cmp-card--muted { border-top-color: var(--ink-mute); }
+.cmp-card__h { font-family: var(--f-body); font-weight: 700; font-size: 3cqh; line-height: 1; }
+.cmp-card__k { font-family: var(--f-body); font-weight: 300; font-size: 1.8cqh; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-mute); margin-top: .3cqh; }
+.cmp-card__l { list-style: none; margin-top: 1.4cqh; display: flex; flex-direction: column; gap: .7cqh; }
+.cmp-card__l li { font-family: var(--f-body); font-size: 2cqh; line-height: 1.25; color: var(--ink-soft); }
+
+/* A table that should size to its rows rather than stretch to fill the
+   grid row it sits in. Without it the browser distributes the spare
+   height across the rows and the list drifts apart. */
+.qtable-compact { align-self: start; }
+.qtable-compact td { padding: 0.85cqh 1.2cqw 0.85cqh 0; }
+
+/* ---- Footer lockups: MMGY beside the conference mark -----------------
+   Replaces the single .foot-mark on the talk deck. Grouped in one box so
+   both marks share a baseline and the pair sits exactly where the
+   conference lockup did. The MMGY mark is a solid block, so it is sized a
+   touch shorter than the lockup to carry the same visual weight. */
+.foot-marks {
+  position: absolute; right: 2.8cqw; bottom: 1.9cqh; z-index: 4;
+  display: flex; align-items: center; gap: 1.1cqw; pointer-events: none;
+}
+.foot-marks img { display: block; width: auto; }
+.foot-marks img:first-child { height: 5.6cqh; }
+.foot-marks img:last-child  { height: 6.8cqh; }
+.foot-marks__rule { width: 1px; height: 5cqh; background: var(--hairline-strong); }
+.l-sep .foot-marks__rule, .l-title .foot-marks__rule,
+[data-hud="light"] .foot-marks__rule { background: rgba(255,255,255,.45); }

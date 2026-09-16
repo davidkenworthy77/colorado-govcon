@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Pattern Library — Colorado Governor's Conference</title>
+
+<link rel="stylesheet" href="../engine/deck.css" />
+<link rel="stylesheet" href="../engine/charts.css" />
+<link rel="stylesheet" href="../brand/colorado.css" />
+<link rel="stylesheet" href="../brand/components.css" />
+
+<style>
+  /* Library-only chrome: a caption strip naming the pattern on each
+     slide. Not part of the system — decks do not get this. */
+  .lib-tag {
+    position: absolute; left: 0; top: 0; z-index: 20;
+    background: var(--navy-ink); color: var(--gold);
+    font-family: var(--f-mono); font-size: 1.25cqh; letter-spacing: .18em;
+    text-transform: uppercase; padding: .9cqh 1.4cqw;
+  }
+  .lib-tag b { color: #fff; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div class="deck-shell">
+  <div class="progress-bar" id="progress"></div>
+  <div class="stage" id="stage">
+
+  <!-- ══════════════════════════════════════════════════════════
+       01 · COVER
+       ══════════════════════════════════════════════════════════ -->
+  <section class="slide l-cover" data-section="Covers" data-title="Cover — panel on photography" data-hud="light">
+    <div class="media-full"><img src="../deck/img/photo/river-paddle.jpg" alt="" class="fx fx--bleed" /></div>
+    <div class="cover-panel fx fx--scale">
+      <div class="cover-title"><img src="../brand/logos/govconf.png" alt="Colorado Governor's Conference on Tourism" /></div>
+      <div class="cover-meta">Breckenridge &nbsp;|&nbsp; September 23–25, 2026</div>
+    </div>
+    <div class="lib-tag"><b>01</b> &nbsp;l-cover &nbsp;·&nbsp; .cover-panel</div>
+    <aside class="notes">
+      <span class="cue">Pattern</span>
+      <p>The template's own title slide, rebuilt. Full-bleed photography behind a
+      centred sand panel that sizes to its content — 34% wide, with the lockup
+      sized off the panel so the two stay in proportion.</p>
+      <p>Use <code>.l-cover-wide</code> when the talk title needs more room than
+      a logo lockup.</p>
+    </aside>
+  </section>
+
+  <!-- 02 · TITLE — type on photography -->
+  <section class="slide l-title" data-section="Covers" data-title="Title — type on photography" data-hud="light">
+    <div class="media-full wash"><img src="../deck/img/photo/red-rocks.jpg" alt="" class="fx fx--bleed" /></div>
+    <div class="title-body" style="color:#fff">
+      <p class="eyebrow fx fx-1" style="color:var(--gold)">Governor's Conference on Tourism · 2026</p>
+      <h1 class="d-xl fx fx-2" style="margin:1.6cqh 0 2.4cqh">The next <span class="acc">ten years</span><br />of Colorado travel</h1>
+      <p class="body-lead fx fx-3" style="max-width:70%;opacity:.92">A subtitle line sits here, one or two lines at most, in sentence case.</p>
+    </div>
+    <div class="lib-tag"><b>02</b> &nbsp;l-title &nbsp;·&nbsp; .wash</div>
+    <aside class="notes"><p>Cover without the panel. The <code>.wash</code> gradient is what keeps
+    white type legible over any photograph — never set type on bare imagery.</p></aside>
+  </section>
+
+  <!-- 03 · SECTION DIVIDER -->
+  <section class="slide l-section g-navy" data-section="Structure" data-title="Section divider">
+    <div class="sec-inner">
+      <p class="sec-num fx fx-1">Section 02</p>
+      <h2 class="d-mega fx fx-2">Where the<br /><span class="acc">demand</span> is</h2>
+      <p class="body-lead fx fx-3" style="margin-top:3cqh;opacity:.8">Three shifts in who is coming, and when.</p>
+    </div>
+    <div class="ridge"></div>
+    <div class="lib-tag"><b>03</b> &nbsp;l-section &nbsp;·&nbsp; .ridge &nbsp;·&nbsp; g-navy</div>
+    <aside class="notes"><p>The separator. <code>.ridge</code> is a pure-CSS mountain silhouette —
+    no asset, tints with currentColor, prints clean.</p></aside>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SEPARATORS — from separator slides.pptx
+       ══════════════════════════════════════════════════════════ -->
+  <section class="slide l-sep" data-section="Separators" data-title="Photo separator" data-hud="light">
+    <div class="media-full"><img src="../deck/img/sep/bike-overlook.jpg" alt="" class="fx fx--bleed" /></div>
+    <h2 class="sep-tab fx fx--wipe">Separator Slide</h2>
+    <img class="foot-mark fx fx--in fx-5" src="../brand/logos/govconf-h-white.png" alt="Colorado Governor&#39;s Conference" />
+    <div class="lib-tag"><b>04</b> &nbsp;l-sep &nbsp;·&nbsp; .sep-tab &nbsp;·&nbsp; .foot-mark</div>
+    <aside class="notes">
+      <span class="cue">Pattern</span>
+      <p>The template's separator, measured from the slide XML: a #3F3F3F tab running off
+      the left edge at 10% down, one rounded corner, 38pt Helvetica Neue Bold in white,
+      and the white lockup bottom-right.</p>
+      <p>The tab wipes in from the edge; the photo settles with a slow push.</p>
+    </aside>
+  </section>
+
+  <section class="slide l-sep" data-section="Separators" data-title="Separator — long title" data-hud="light">
+    <div class="media-full"><img src="../deck/img/sep/bridal-veil-falls.jpg" alt="" class="fx fx--bleed" /></div>
+    <h2 class="sep-tab fx fx--wipe"><span class="sep-kicker">Section 02</span>Where the visitors we&rsquo;re missing actually book</h2>
+    <img class="foot-mark fx fx--in fx-5" src="../brand/logos/govconf-h-white.png" alt="Colorado Governor&#39;s Conference" />
+    <div class="lib-tag"><b>05</b> &nbsp;.sep-tab grows &nbsp;·&nbsp; .sep-kicker &nbsp;·&nbsp; .sep-tab-sm</div>
+    <aside class="notes">
+      <p>The source tab is a fixed 39% box. Here 39% is the minimum: a longer title widens
+      the tab to 70% of the slide, then wraps, balanced, onto a second line. For a title
+      that would need three lines, add <code>.sep-tab-sm</code>.</p>
+      <p><code>.sep-kicker</code> is optional — a section number over the title. Not in the
+      template; delete the span and the tab is exactly the original.</p>
+    </aside>
+  </section>
+
+  <section class="slide l-simple g-sand" data-section="Separators" data-title="Separator photo set">
+    <header class="simple-head">
+      <h2 class="t-head fx fx-1">Ten separator photos</h2>
+      <p class="t-sub fx fx-2">Pick one per section</p>
+    </header>
+    <div class="simple-body fx fx-3" style="right:4.6cqw">
+      <div class="cols-5" style="gap:1.4cqw 1.2cqw">
+        <div><div class="sep-mini"><div class="l-sep">
+          <div class="media-full"><img src="../deck/img/sep/bike-overlook.jpg" alt="" /></div>
+          <p class="sep-tab">Section title</p>
+          <img class="foot-mark" src="../brand/logos/govconf-h-white.png" alt="" /></div></div>
+          <p class="sep-mini-cap">bike-overlook.jpg</p></div>
+        <div><div class="sep-mini"><div class="l-sep">
+          <div class="media-full"><img src="../deck/img/sep/bridal-veil-falls.jpg" alt="" /></div>
+          <p class="sep-tab">Section title</p>
+          <img class="foot-mark" src="../brand/logos/govconf-h-white.png" alt="" /></div></div>
+          <p class="sep-mini-cap">bridal-veil-falls.jpg</p></div>
+        <div><div class="sep-mini"><div class="l-sep">
+          <div class="media-full"><img src="../deck/img/sep/paddleboard-lake.jpg" alt="" /></div>
+          <p class="sep-tab">Section title</p>
+          <img class="foot-mark" src="../brand/logos/govconf-h-white.png" alt="" /></div></div>
+          <p class="sep-mini-cap">paddleboard-lake.jpg</p></div>
+        <div><div class="sep-mini"><div class="l-sep">
+          <div class="media-full"><img src="../deck/img/sep/alpine-hikers.jpg" alt="" /></div>
+          <p class="sep-tab">Section title</p>
+          <img class="foot-mark" src="../brand/logos/govconf-h-white.png" alt="" /></div></div>
+          <p class="sep-mini-cap">alpine-hikers.jpg</p></div>
+        <div><div class="sep-mini"><div class="l-sep">
+          <div class="media-full"><img src="../deck/img/sep/red-rocks-family.jpg" alt="" /></div>
+          <p class="sep-tab">Section title</p>
+          <img class="foot-mark" src="../brand/logos/govconf-h-white.png" alt="" /></div></div>
+          <p class="sep-mini-cap">red-rocks-family.jpg</p></div>
+        <div><div class="sep-mini"><div class="l-sep">
+          <div class="media-full"><img src="../deck/img/sep/mirror-lake.jpg" alt="" /></div>
+          <p class="sep-tab">Section title</p>
+          <img class="foot-mark" src="../brand/logos/govconf-h-white.png" alt="" /></div></div>
+          <p class="sep-mini-cap">mirror-lake.jpg</p></div>
+        <div><div class="sep-mini"><div class="l-sep">
+          <div class="media-full"><img src="../deck/img/sep/river-surf.jpg" alt="" /></div>
+          <p class="sep-tab">Section title</p>
+          <img class="foot-mark" src="../brand/logos/govconf-h-white.png" alt="" /></div></div>
+          <p class="sep-mini-cap">river-surf.jpg</p></div>
+        <div><div class="sep-mini"><div class="l-sep">
+          <div class="media-full"><img src="../deck/img/sep/reservoir-dusk.jpg" alt="" /></div>
+          <p class="sep-tab">Section title</p>
+          <img class="foot-mark" src="../brand/logos/govconf-h-white.png" alt="" /></div></div>
+          <p class="sep-mini-cap">reservoir-dusk.jpg</p></div>
+        <div><div class="sep-mini"><div class="l-sep">
+          <div class="media-full"><img src="../deck/img/sep/lakeside-camp.jpg" alt="" /></div>
+          <p class="sep-tab">Section title</p>
+          <img class="foot-mark" src="../brand/logos/govconf-h-white.png" alt="" /></div></div>
+          <p class="sep-mini-cap">lakeside-camp.jpg</p></div>
+        <div><div class="sep-mini"><div class="l-sep">
+          <div class="media-full"><img src="../deck/img/sep/wildflower-peak.jpg" alt="" /></div>
+          <p class="sep-tab">Section title</p>
+          <img class="foot-mark" src="../brand/logos/govconf-h-white.png" alt="" /></div></div>
+          <p class="sep-mini-cap">wildflower-peak.jpg</p></div>
+      </div>
+    </div>
+    <div class="lib-tag"><b>06</b> &nbsp;.sep-mini &nbsp;·&nbsp; deck/img/sep/</div>
+    <aside class="notes">
+      <p>All ten photos from the supplied separator file, each cropped to exactly the framing
+      the template used. Swap the <code>src</code> on a separator's <code>.media-full img</code>
+      to use a different one.</p>
+      <p>These are real separators drawn at thumbnail size: each thumbnail is its own size
+      container, so the same cqh-based rules draw a correct miniature.</p>
+    </aside>
+  </section>
+
+  <!-- 04 · AGENDA -->
+  <section class="slide l-grid pad g-sand" data-section="Structure" data-title="Agenda">
+    <p class="eyebrow fx fx-1">In this session</p>
+    <h2 class="d-lg fx fx-2" style="margin:1.4cqh 0 4cqh">What we'll cover</h2>
+    <div class="rows fx-auto">
+      <div class="rows__row fx"><span class="rows__num">01</span><div>
+        <p class="rows__title">The visitor we have</p>
+        <p class="rows__body">Who is actually arriving, and how that has moved since 2019.</p></div></div>
+      <div class="rows__row fx"><span class="rows__num">02</span><div>
+        <p class="rows__title">The visitor we're missing</p>
+        <p class="rows__body">Demand that searches for Colorado and books somewhere else.</p></div></div>
+      <div class="rows__row fx"><span class="rows__num">03</span><div>
+        <p class="rows__title">What the data says to do next</p>
+        <p class="rows__body">Three moves, in order of what they cost.</p></div></div>
+    </div>
+    <div class="lib-tag"><b>07</b> &nbsp;l-grid &nbsp;·&nbsp; .rows &nbsp;·&nbsp; .fx-auto</div>
+    <aside class="notes"><p><code>.fx-auto</code> on the container staggers every child
+    automatically — no counting <code>.fx-1 … .fx-12</code> by hand.</p></aside>
+  </section>
+
+  <!-- 05 · SPEAKERS -->
+  <section class="slide l-grid pad" data-section="Structure" data-title="Speakers">
+    <p class="eyebrow center-x fx fx-1" style="text-align:center">Today's speakers</p>
+    <h2 class="d-md fx fx-2" style="text-align:center;margin:1.2cqh 0 5cqh">Subhead all caps</h2>
+    <div class="speakers-3 fx-auto">
+      <div class="speaker fx"><div class="media-ph speaker__photo"><span class="media-ph__label">Photo</span></div>
+        <div><p class="speaker__name">Speaker Name</p><p class="speaker__title">Speaker Title / Credentials</p><p class="speaker__org">Organisation</p></div></div>
+      <div class="speaker fx"><div class="media-ph speaker__photo"><span class="media-ph__label">Photo</span></div>
+        <div><p class="speaker__name">Speaker Name</p><p class="speaker__title">Speaker Title / Credentials</p><p class="speaker__org">Organisation</p></div></div>
+      <div class="speaker fx"><div class="media-ph speaker__photo"><span class="media-ph__label">Photo</span></div>
+        <div><p class="speaker__name">Speaker Name</p><p class="speaker__title">Speaker Title / Credentials</p><p class="speaker__org">Organisation</p></div></div>
+    </div>
+    <div class="lib-tag"><b>08</b> &nbsp;.speakers-1 / -2 / -3 &nbsp;·&nbsp; .media-ph</div>
+    <aside class="notes"><p>The template's slides 2–4 collapsed into one component.
+    Swap <code>.speakers-3</code> for <code>-2</code> or <code>-1</code>; the grid recentres itself.</p></aside>
+  </section>
+
+  <!-- 06 · HEADLINE + LEAD -->
+  <section class="slide l-headline pad" data-section="Content" data-title="Headline and lead">
+    <p class="eyebrow fx fx-1">Subhead all caps</p>
+    <h2 class="d-lg fx fx-2" style="margin:1.4cqh 0 3cqh;max-width:78%">A headline that carries<br />the <span class="acc">whole argument</span></h2>
+    <hr class="rule-gold fx fx-3" />
+    <p class="body-lead lede fx fx-4" style="margin-top:3cqh">One paragraph of lead copy. Keep it to three lines: this is read
+      across a room, and anything longer gets skimmed rather than heard. If it needs more, it needs another slide.</p>
+    <div class="lib-tag"><b>09</b> &nbsp;l-headline &nbsp;·&nbsp; .eyebrow &nbsp;·&nbsp; .rule-gold</div>
+  </section>
+
+  <!-- 07 · BULLETS (the template's content slide) -->
+  <section class="slide l-bullets pad g-parchment" data-section="Content" data-title="Headline and bullets">
+    <div>
+      <p class="eyebrow fx fx-1">Subhead all caps</p>
+      <h2 class="d-md fx fx-2" style="margin-top:1.4cqh">Headline<br />goes here</h2>
+    </div>
+    <ul class="bullets fx-auto">
+      <li class="fx">A bulleted point, written as a full sentence so it can be read aloud.</li>
+      <li class="fx">The marker is the Colorado C, drawn in CSS — it carries the brand without an icon font.</li>
+      <li class="fx">Four to six points. More than that and the room stops reading.</li>
+      <li class="fx">Body copy never goes below 2.0cqh. Cut words instead of shrinking type.</li>
+    </ul>
+    <div class="lib-tag"><b>10</b> &nbsp;l-bullets &nbsp;·&nbsp; .bullets &nbsp;·&nbsp; .co-c marker</div>
+  </section>
+
+  <!-- 08 · SPLIT with media -->
+  <section class="slide l-split l-split-40" data-section="Content" data-title="Split — content and media">
+    <div class="split-pane split-pane-sand">
+      <p class="eyebrow fx fx-1">Subhead all caps</p>
+      <h2 class="d-md fx fx-2" style="margin:1.4cqh 0 2.4cqh">Split layout</h2>
+      <p class="body-med fx fx-3">Content on one side, photography on the other. <code>--split</code>
+        sets the ratio; <code>.l-split-40</code>, <code>-60</code> and <code>-33</code> are the presets.</p>
+      <p class="source fx fx-4" style="margin-top:3cqh">Source: Colorado Tourism Office, 2026</p>
+    </div>
+    <div class="split-media"><img src="../deck/img/photo/co-a.jpg" alt="" /></div>
+    <div class="lib-tag"><b>11</b> &nbsp;l-split &nbsp;·&nbsp; .split-pane &nbsp;·&nbsp; .split-media</div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TEMPLATE CONTENT LAYOUTS — from Simple slides.pptx
+       ══════════════════════════════════════════════════════════ -->
+  <section class="slide l-simple g-sand" data-section="Template" data-title="Simple — bullets">
+    <header class="simple-head">
+      <h2 class="t-head fx fx-1">Headline</h2>
+      <p class="t-sub fx fx-2">Subhead all caps</p>
+    </header>
+    <div class="simple-body">
+      <ul class="t-bullets fx-auto">
+        <li class="fx">Bulleted list goes here</li>
+        <li class="fx">Written as full sentences, so each one can be read aloud</li>
+        <li class="fx">The bullet is the template&rsquo;s own ● in ink, not the Colorado C</li>
+        <li class="fx">Four to six points, and the column stops short of the lockup</li>
+      </ul>
+    </div>
+    <img class="foot-mark fx fx--in fx-6" src="../brand/logos/govconf-h.png" alt="Colorado Governor&#39;s Conference" />
+    <div class="lib-tag"><b>12</b> &nbsp;l-simple &nbsp;·&nbsp; .t-head .t-sub .t-bullets</div>
+    <aside class="notes">
+      <span class="cue">Template voice</span>
+      <p>This is the conference template's own content slide: Helvetica Neue Bold headline
+      in sentence case, a light all-caps subhead UNDER it, body from 31.5% down, grey lockup
+      bottom-right. The headline is pinned by its bottom edge, so a two-line headline grows
+      upward and the body never moves.</p>
+    </aside>
+  </section>
+
+  <section class="slide l-simple g-sand" data-section="Template" data-title="Simple — paragraph">
+    <header class="simple-head">
+      <h2 class="t-head fx fx-1">Headline</h2>
+      <p class="t-sub fx fx-2">Subhead all caps</p>
+    </header>
+    <div class="simple-body t-body fx fx-3" style="max-width:62cqw">
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+        labore et dolore magna aliqua.</p>
+      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+        commodo consequat.</p>
+    </div>
+    <img class="foot-mark fx fx--in fx-5" src="../brand/logos/govconf-h.png" alt="Colorado Governor&#39;s Conference" />
+    <div class="lib-tag"><b>13</b> &nbsp;l-simple &nbsp;·&nbsp; .t-body</div>
+  </section>
+
+  <section class="slide l-aside g-sand" data-section="Template" data-title="Aside — photo right">
+    <div class="aside-media"><img src="../deck/img/aside/union-station.jpg" alt="" class="fx fx--scale" /></div>
+    <header class="simple-head">
+      <h2 class="t-head fx fx-1">Headline</h2>
+      <p class="t-sub fx fx-2">Subhead all caps</p>
+    </header>
+    <div class="simple-body">
+      <ul class="t-bullets fx-auto">
+        <li class="fx">Bulleted list goes here</li>
+        <li class="fx">Bulleted list goes here</li>
+        <li class="fx">Bulleted list goes here</li>
+        <li class="fx">Bulleted list goes here</li>
+      </ul>
+    </div>
+    <img class="foot-mark fx fx--in fx-6" src="../brand/logos/govconf-h-white.png" alt="Colorado Governor&#39;s Conference" />
+    <div class="lib-tag"><b>14</b> &nbsp;l-aside &nbsp;·&nbsp; .aside-media &nbsp;·&nbsp; deck/img/aside/</div>
+    <aside class="notes"><p>The template's image-aside slide: text on the left 46%, the photo
+    filling the right half at full bleed height. The lockup sits on the photo, so it is the
+    white one. Five photos ship in <code>deck/img/aside/</code>, cropped to the template&rsquo;s framing.</p></aside>
+  </section>
+
+  <section class="slide l-aside l-aside-left g-sand" data-section="Template" data-title="Aside — photo left" data-hud="light">
+    <div class="aside-media"><img src="../deck/img/aside/fly-fishing.jpg" alt="" class="fx fx--scale" /></div>
+    <header class="simple-head">
+      <h2 class="t-head fx fx-1">Photo on the left</h2>
+      <p class="t-sub fx fx-2">Mirrored aside</p>
+    </header>
+    <div class="simple-body">
+      <ul class="t-bullets fx-auto">
+        <li class="fx">The same layout, mirrored</li>
+        <li class="fx">Alternate it with the right-hand version so a run of aside slides has rhythm</li>
+        <li class="fx">The lockup is back on sand, so it is the grey one</li>
+      </ul>
+    </div>
+    <img class="foot-mark fx fx--in fx-6" src="../brand/logos/govconf-h.png" alt="Colorado Governor&#39;s Conference" />
+    <div class="lib-tag"><b>15</b> &nbsp;.l-aside-left &nbsp;·&nbsp; data-hud="light"</div>
+    <aside class="notes"><p>Not in the source file — a mirror of the aside, so consecutive
+    photo slides do not all face the same way. <code>data-hud="light"</code> whitens the
+    presenter HUD, which now sits over the photo.</p></aside>
+  </section>
+
+  <section class="slide l-aside g-sand" data-section="Template" data-title="Aside — stat">
+    <div class="aside-media"><img src="../deck/img/aside/horseback.jpg" alt="" class="fx fx--scale" /></div>
+    <header class="simple-head">
+      <h2 class="t-head fx fx-1">A number, and a photo</h2>
+      <p class="t-sub fx fx-2">Subhead all caps</p>
+    </header>
+    <div class="simple-body aside-stat">
+      <p class="stat__num fx fx-3" data-countup>68%</p>
+      <p class="stat__label fx fx-4">of trips include a trail</p>
+      <p class="t-body fx fx-5" style="font-size:2.6cqh">One sentence on why the number matters to this room.</p>
+      <p class="source fx fx-6" style="margin-top:2cqh">Source: placeholder</p>
+    </div>
+    <img class="foot-mark fx fx--in fx-6" src="../brand/logos/govconf-h-white.png" alt="Colorado Governor&#39;s Conference" />
+    <div class="lib-tag"><b>16</b> &nbsp;l-aside &nbsp;·&nbsp; .aside-stat</div>
+  </section>
+
+  <section class="slide l-simple g-sand" data-section="Template" data-title="Simple — two columns">
+    <header class="simple-head">
+      <h2 class="t-head fx fx-1">Two columns of points</h2>
+      <p class="t-sub fx fx-2">Subhead all caps</p>
+    </header>
+    <div class="simple-body" style="right:4.6cqw">
+      <ul class="t-bullets t-cols-2 fx fx-3">
+        <li>First point in the list</li>
+        <li>Second point in the list</li>
+        <li>Third point in the list</li>
+        <li>Fourth point in the list</li>
+        <li>Fifth point in the list</li>
+        <li>Sixth point in the list</li>
+      </ul>
+    </div>
+    <img class="foot-mark fx fx--in fx-5" src="../brand/logos/govconf-h.png" alt="Colorado Governor&#39;s Conference" />
+    <div class="lib-tag"><b>17</b> &nbsp;.t-bullets.t-cols-2</div>
+    <aside class="notes"><p>When six or more short points would run the column off the
+    slide. Items never split across the columns.</p></aside>
+  </section>
+
+  <section class="slide l-simple g-sand" data-section="Template" data-title="Simple — chart">
+    <header class="simple-head">
+      <h2 class="t-head fx fx-1">A chart in the template frame</h2>
+      <p class="t-sub fx fx-2">Visitation by quarter, millions</p>
+    </header>
+    <div class="simple-body fx fx-3" style="right:4.6cqw">
+      <figure class="chart" data-chart="column">
+        <script type="application/json">
+        {"categories":["Q1","Q2","Q3","Q4"],
+         "series":[{"name":"2024","data":[18.2,22.4,31.1,21.6],"tone":4},
+                   {"name":"2025","data":[19.1,24.8,33.9,22.4],"tone":0}],
+         "suffix":"M","decimals":1}
+        </script>
+      </figure>
+    </div>
+    <img class="foot-mark fx fx--in fx-5" src="../brand/logos/govconf-h.png" alt="Colorado Governor&#39;s Conference" />
+    <div class="lib-tag"><b>18</b> &nbsp;l-simple &nbsp;·&nbsp; any chart in .simple-body</div>
+    <aside class="notes"><p>Any of the seventeen chart types drops into <code>.simple-body</code>
+    and fills it. The chart stops short of the lockup on its own.</p></aside>
+  </section>
+
+  <section class="slide l-simple g-sand" data-section="Template" data-title="Simple — photo strip">
+    <header class="simple-head">
+      <h2 class="t-head fx fx-1">Three places, three reasons</h2>
+      <p class="t-sub fx fx-2">Subhead all caps</p>
+    </header>
+    <div class="simple-body" style="right:4.6cqw">
+      <div class="photo-strip fx-auto">
+        <figure class="fx"><div class="media"><img src="../deck/img/aside/ice-castle.jpg" alt="" /></div>
+          <figcaption><b>Winter</b>A short caption, one or two lines.</figcaption></figure>
+        <figure class="fx"><div class="media"><img src="../deck/img/aside/fly-fishing.jpg" alt="" /></div>
+          <figcaption><b>Summer</b>A short caption, one or two lines.</figcaption></figure>
+        <figure class="fx"><div class="media"><img src="../deck/img/aside/aspen-trail.jpg" alt="" /></div>
+          <figcaption><b>Fall</b>A short caption, one or two lines.</figcaption></figure>
+      </div>
+    </div>
+    <img class="foot-mark fx fx--in fx-5" src="../brand/logos/govconf-h.png" alt="Colorado Governor&#39;s Conference" />
+    <div class="lib-tag"><b>19</b> &nbsp;.photo-strip</div>
+  </section>
+
+  <!-- 09 · HERO STAT -->
+  <section class="slide l-stat g-gold" data-section="Data" data-title="Hero stat">
+    <div class="stat-inner">
+      <p class="eyebrow fx fx-1">Total visitor spending</p>
+      <p class="stat-mega fx fx-2" data-countup style="margin:1.6cqh 0">28.2</p>
+      <p class="d-sm fx fx-3">billion dollars, 2025</p>
+      <p class="body-med fx fx-4" style="margin-top:2.6cqh;max-width:64%;margin-inline:auto">
+        One number, as large as it will go. If a slide has a single job, give it a single number.</p>
+    </div>
+    <div class="lib-tag"><b>20</b> &nbsp;l-stat &nbsp;·&nbsp; data-countup &nbsp;·&nbsp; g-gold</div>
+    <aside class="notes"><p><code>data-countup</code> animates 0 → value on arrival and
+    survives suffixes and inline markup. Decimals and thousands separators are preserved.</p></aside>
+  </section>
+
+  <!-- 10 · STAT ROW -->
+  <section class="slide l-grid pad" data-section="Data" data-title="Stat row">
+    <p class="eyebrow fx fx-1">The year in four numbers</p>
+    <h2 class="d-md fx fx-2" style="margin:1.4cqh 0 5cqh">2025 at a glance</h2>
+    <div class="stat-grid cols-4 ruled fx-auto">
+      <div class="stat fx"><hr class="stat__rule" /><span class="stat__num" data-countup>93.3</span><span class="stat__label">Million visitors</span><span class="stat__note">+2.1% year over year</span></div>
+      <div class="stat fx"><hr class="stat__rule" /><span class="stat__num" data-countup>28.2</span><span class="stat__label">Billion in spending</span><span class="stat__note">A record high</span></div>
+      <div class="stat fx"><hr class="stat__rule" /><span class="stat__num" data-countup>1.9</span><span class="stat__label">Billion in state tax</span><span class="stat__note">Generated by travel</span></div>
+      <div class="stat fx"><hr class="stat__rule" /><span class="stat__num" data-countup>187</span><span class="stat__label">Thousand jobs</span><span class="stat__note">Directly supported</span></div>
+    </div>
+    <p class="source fx fx-6" style="margin-top:5cqh">Source: Colorado Tourism Office · Dean Runyan Associates · Placeholder figures</p>
+    <div class="lib-tag"><b>21</b> &nbsp;.stat-grid.ruled &nbsp;·&nbsp; .stat &nbsp;·&nbsp; .source</div>
+  </section>
+
+  <!-- 11 · KPI TILES + delta -->
+  <section class="slide l-grid pad g-sand" data-section="Data" data-title="KPI tiles">
+    <p class="eyebrow fx fx-1">Dashboard shape</p>
+    <h2 class="d-md fx fx-2" style="margin:1.4cqh 0 4cqh">KPI tiles with sparklines</h2>
+    <div class="cols-4 fx-auto">
+      <div class="kpi fx"><span class="kpi__num" data-countup>72</span><span class="kpi__label">Occupancy, %</span>
+        <span class="delta delta-up">3.4 pts</span>
+        <figure class="chart kpi__spark" data-chart="sparkline"><script type="application/json">{"data":[52,55,58,57,61,66,72]}</script></figure></div>
+      <div class="kpi fx"><span class="kpi__num" data-countup>241</span><span class="kpi__label">Average daily rate, $</span>
+        <span class="delta delta-up">6.1%</span>
+        <figure class="chart kpi__spark" data-chart="sparkline"><script type="application/json">{"data":[188,196,205,212,226,233,241],"tone":1}</script></figure></div>
+      <div class="kpi fx"><span class="kpi__num" data-countup>3.1</span><span class="kpi__label">Nights, average stay</span>
+        <span class="delta delta-flat">no change</span>
+        <figure class="chart kpi__spark" data-chart="sparkline"><script type="application/json">{"data":[3.0,3.1,3.0,3.1,3.1,3.0,3.1],"tone":3}</script></figure></div>
+      <div class="kpi fx"><span class="kpi__num" data-countup>18</span><span class="kpi__label">Booking window, days</span>
+        <span class="delta delta-down">4 days</span>
+        <figure class="chart kpi__spark" data-chart="sparkline"><script type="application/json">{"data":[31,29,27,24,22,20,18],"tone":2}</script></figure></div>
+    </div>
+    <div class="lib-tag"><b>22</b> &nbsp;.kpi &nbsp;·&nbsp; .delta &nbsp;·&nbsp; sparkline</div>
+  </section>
+
+  <!-- 12 · COLUMN CHART -->
+  <section class="slide l-chart pad" data-section="Charts" data-title="Chart — column">
+    <div>
+      <p class="eyebrow fx fx-1">Chart · column</p>
+      <h2 class="d-md fx fx-2" style="margin-top:1.2cqh">Visitation by quarter</h2>
+    </div>
+    <figure class="chart fx fx-3" data-chart="column">
+      <script type="application/json">
+      {"categories":["Q1","Q2","Q3","Q4"],
+       "series":[{"name":"2024","data":[18.2,22.4,31.1,21.6],"tone":4},
+                 {"name":"2025","data":[19.1,24.8,33.9,22.4],"tone":0}],
+       "suffix":"M","decimals":1}
+      </script>
+    </figure>
+    <p class="source">Source: placeholder data · replace with the real series</p>
+    <div class="lib-tag"><b>23</b> &nbsp;l-chart &nbsp;·&nbsp; data-chart="column"</div>
+    <aside class="notes"><p><code>tone</code> lets a series claim a ramp slot out of order — here
+    last year is muted (slot 4) so this year (slot 1, gold) reads as the hero.</p></aside>
+  </section>
+
+  <!-- 13 · BAR + takeaway -->
+  <section class="slide l-chart-split pad g-parchment" data-section="Charts" data-title="Chart — bar with takeaway">
+    <figure class="chart fx fx-2" data-chart="bar" style="height:64cqh">
+      <script type="application/json">
+      {"categories":["Hiking & trails","National parks","Ski & snowboard","Food & drink","Live music","Wellness"],
+       "series":[{"data":[68,61,44,39,27,19]}],
+       "highlight":0,"suffix":"%"}
+      </script>
+    </figure>
+    <div class="takeaway">
+      <p class="eyebrow fx fx-1">The takeaway</p>
+      <h2 class="d-sm fx fx-3">Trails out-pull<br />every other<br /><span class="acc">reason to come</span></h2>
+      <p class="body-sm fx fx-4" style="color:var(--ink-soft)">Percentage of visitors naming each activity as a
+        primary trip motivator.</p>
+      <p class="source fx fx-5">Source: placeholder</p>
+    </div>
+    <div class="lib-tag"><b>24</b> &nbsp;l-chart-split &nbsp;·&nbsp; bar &nbsp;·&nbsp; highlight</div>
+  </section>
+
+  <!-- 14 · LINE / AREA -->
+  <section class="slide l-chart pad g-navy" data-section="Charts" data-title="Chart — line">
+    <div>
+      <p class="eyebrow fx fx-1">Chart · line</p>
+      <h2 class="d-md fx fx-2" style="margin-top:1.2cqh">Ten years of demand</h2>
+    </div>
+    <figure class="chart fx fx-3" data-chart="line">
+      <script type="application/json">
+      {"categories":["2016","2017","2018","2019","2020","2021","2022","2023","2024","2025"],
+       "series":[{"name":"Domestic","data":[76,79,82,86,41,71,84,88,91,93]},
+                 {"name":"International","data":[9,10,11,12,2,4,7,9,10,11],"tone":1}],
+       "suffix":"M"}
+      </script>
+    </figure>
+    <p class="source">Source: placeholder · the draw-on animates left to right on arrival</p>
+    <div class="lib-tag"><b>25</b> &nbsp;line &nbsp;·&nbsp; also: area, slope, scatter</div>
+  </section>
+
+  <!-- 15 · DONUT + WAFFLE -->
+  <section class="slide l-grid pad" data-section="Charts" data-title="Chart — donut and waffle">
+    <p class="eyebrow fx fx-1">Chart · parts of a whole</p>
+    <h2 class="d-md fx fx-2" style="margin:1.2cqh 0 3cqh">Two ways to show a share</h2>
+    <div class="cols-2" style="gap:4cqw">
+      <figure class="chart fx fx-3" data-chart="donut" style="height:52cqh">
+        <script type="application/json">
+        {"data":[{"name":"Front Range","value":42},{"name":"Mountain resorts","value":31},
+                 {"name":"Western Slope","value":16},{"name":"Plains","value":11}],
+         "center":"42%","centerLabel":"Front Range","suffix":"%"}
+        </script>
+      </figure>
+      <figure class="chart fx fx-4" data-chart="waffle" style="height:52cqh">
+        <script type="application/json">{"value":68,"label":"of trips include a trail"}</script>
+      </figure>
+    </div>
+    <div class="lib-tag"><b>26</b> &nbsp;donut &nbsp;·&nbsp; waffle &nbsp;·&nbsp; also: gauge, pictogram</div>
+  </section>
+
+  <!-- 16 · STACKED + PROGRESS -->
+  <section class="slide l-grid pad g-sand" data-section="Charts" data-title="Chart — stacked and progress">
+    <p class="eyebrow fx fx-1">Chart · composition and quotas</p>
+    <h2 class="d-md fx fx-2" style="margin:1.2cqh 0 3cqh">Stacked and progress</h2>
+    <div class="cols-2" style="gap:4cqw">
+      <figure class="chart fx fx-3" data-chart="stacked" style="height:52cqh">
+        <script type="application/json">
+        {"categories":["2023","2024","2025"],
+         "series":[{"name":"Leisure","data":[62,64,67]},
+                   {"name":"Business","data":[24,22,20],"tone":1},
+                   {"name":"Group","data":[14,14,13],"tone":4}],
+         "stack":"pct","values":true}
+        </script>
+      </figure>
+      <figure class="chart fx fx-4" data-chart="progress" style="height:52cqh">
+        <script type="application/json">
+        {"rows":[{"name":"Awareness"},{"name":"Consideration"},{"name":"Intent"},{"name":"Booking"}],
+         "suffix":"%","labelWidth":330}
+        </script>
+      </figure>
+    </div>
+    <div class="lib-tag"><b>27</b> &nbsp;stacked (pct) &nbsp;·&nbsp; progress</div>
+    <aside class="notes"><p>The progress chart on the right has rows with no values —
+    deliberately. A malformed or half-written config renders empty tracks rather than
+    throwing, so a slide is never blank mid-talk.</p></aside>
+  </section>
+
+  <!-- 17 · FUNNEL + DUMBBELL -->
+  <section class="slide l-grid pad" data-section="Charts" data-title="Chart — funnel and dumbbell">
+    <p class="eyebrow fx fx-1">Chart · drop-off and gaps</p>
+    <h2 class="d-md fx fx-2" style="margin:1.2cqh 0 3cqh">Funnel and dumbbell</h2>
+    <div class="cols-2" style="gap:4cqw">
+      <figure class="chart fx fx-3" data-chart="funnel" style="height:52cqh">
+        <script type="application/json">
+        {"rows":[{"name":"Searched","value":1240000},{"name":"Visited site","value":386000},
+                 {"name":"Viewed a listing","value":112000},{"name":"Booked","value":24800}]}
+        </script>
+      </figure>
+      <figure class="chart fx fx-4" data-chart="dumbbell" style="height:52cqh">
+        <script type="application/json">
+        {"rows":[{"name":"Summer","from":58,"to":74},{"name":"Fall","from":41,"to":63},
+                 {"name":"Winter","from":81,"to":79},{"name":"Spring","from":33,"to":48}],
+         "suffix":"%","labelWidth":220}
+        </script>
+      </figure>
+    </div>
+    <div class="lib-tag"><b>28</b> &nbsp;funnel (with drop-off %) &nbsp;·&nbsp; dumbbell</div>
+  </section>
+
+  <!-- 18 · HEATMAP + GANTT -->
+  <section class="slide l-grid pad g-parchment" data-section="Charts" data-title="Chart — heatmap and gantt">
+    <p class="eyebrow fx fx-1">Chart · grids and time</p>
+    <h2 class="d-md fx fx-2" style="margin:1.2cqh 0 3cqh">Heatmap and Gantt</h2>
+    <div class="cols-2" style="gap:4cqw">
+      <figure class="chart fx fx-3" data-chart="heatmap" style="height:50cqh">
+        <script type="application/json">
+        {"categories":["Jan","Mar","May","Jul","Sep","Nov"],
+         "rows":[{"name":"Mountains","data":[88,64,41,92,71,58]},
+                 {"name":"Front Range","data":[42,55,68,84,73,44]},
+                 {"name":"Western Slope","data":[24,38,57,79,66,29]},
+                 {"name":"Plains","data":[16,27,44,61,48,21]}],
+         "labelWidth":250}
+        </script>
+      </figure>
+      <figure class="chart fx fx-4" data-chart="gantt" style="height:50cqh">
+        <script type="application/json">
+        {"categories":["Q1","Q2","Q3","Q4"],
+         "rows":[{"name":"Research","start":0,"span":1,"label":"6 wks"},
+                 {"name":"Creative","start":0.7,"span":1.5,"label":"10 wks"},
+                 {"name":"In market","start":2,"span":2,"label":"Live"},
+                 {"name":"Measure","start":3.2,"span":0.8}],
+         "labelWidth":230}
+        </script>
+      </figure>
+    </div>
+    <div class="lib-tag"><b>29</b> &nbsp;heatmap (sequential ramp) &nbsp;·&nbsp; gantt</div>
+  </section>
+
+  <!-- 19 · BUILD — click-through -->
+  <section class="slide l-grid pad g-navy" data-section="Motion" data-title="Build — click through" data-steps>
+    <p class="eyebrow fx fx-1">Click through this one</p>
+    <h2 class="d-md fx fx-2" style="margin:1.2cqh 0 4cqh">Three shifts, one at a time</h2>
+    <div class="cols-3">
+      <div class="card card-navy card-top" data-step data-step-dim>
+        <span class="card__num">01</span><p class="card__title">Shoulder season</p>
+        <p class="card__body">Fall now out-books spring by a factor of two.</p></div>
+      <div class="card card-navy card-top" data-step data-step-dim>
+        <span class="card__num">02</span><p class="card__title">Shorter windows</p>
+        <p class="card__body">The median booking window has closed to eighteen days.</p></div>
+      <div class="card card-navy card-top" data-step>
+        <span class="card__num">03</span><p class="card__title">New origins</p>
+        <p class="card__body">Texas and the Southeast are growing faster than the coasts.</p></div>
+    </div>
+    <div class="callout-box" data-step="4" style="margin-top:4cqh">
+      <p class="body-med">All three point the same way: the season is longer and the decision is later.</p>
+    </div>
+    <div class="build-ticks push" style="margin-top:3cqh"></div>
+    <div class="lib-tag"><b>30</b> &nbsp;data-steps &nbsp;·&nbsp; data-step &nbsp;·&nbsp; data-step-dim</div>
+    <aside class="notes">
+      <span class="cue">How builds work</span>
+      <p>RIGHT consumes a build beat before it changes slide. LEFT unwinds it.
+      DOWN and UP skip the build entirely — the escape hatch when a question drags
+      you somewhere else.</p>
+      <p><code>data-step-dim</code> greys a beat back once the next one lands, so the
+      current point always reads as current. In print, every step is fully built.</p>
+    </aside>
+  </section>
+
+  <!-- 20 · MOTION VOCABULARY -->
+  <section class="slide l-grid pad" data-section="Motion" data-title="Motion vocabulary">
+    <p class="eyebrow fx fx-1">Motion vocabulary</p>
+    <h2 class="d-md fx fx-2" style="margin:1.2cqh 0 3.4cqh">Eleven ways in</h2>
+    <div class="cols-4" style="gap:1.6cqw">
+      <div class="card fx"><p class="card__title">fx</p><p class="card__body">Default. Rises 40px.</p></div>
+      <div class="card fx fx--down fx-2"><p class="card__title">fx--down</p><p class="card__body">From above.</p></div>
+      <div class="card fx fx--left fx-3"><p class="card__title">fx--left</p><p class="card__body">From the left.</p></div>
+      <div class="card fx fx--right fx-4"><p class="card__title">fx--right</p><p class="card__body">From the right.</p></div>
+      <div class="card fx fx--in fx-5"><p class="card__title">fx--in</p><p class="card__body">Fade only.</p></div>
+      <div class="card fx fx--scale fx-6"><p class="card__title">fx--scale</p><p class="card__body">Settles in.</p></div>
+      <div class="card fx fx--wipe fx-7"><p class="card__title">fx--wipe</p><p class="card__body">Uncovered, not faded.</p></div>
+      <div class="card fx fx--wipe-up fx-8"><p class="card__title">fx--wipe-up</p><p class="card__body">Wipes upward.</p></div>
+    </div>
+    <p class="body-sm fx fx-10" style="margin-top:3cqh;color:var(--ink-soft)">
+      Also <code>fx--grow-x</code> and <code>fx--grow-y</code> for rules and bars,
+      <code>fx--draw</code> for SVG strokes, and <code>fx--bleed</code> for the slow push on full-bleed photography.
+      Modify travel with <code>fx--near</code> / <code>fx--far</code>.</p>
+    <div class="lib-tag"><b>31</b> &nbsp;.fx--* &nbsp;·&nbsp; .fx-1 … .fx-12</div>
+  </section>
+
+  <!-- 21 · CARDS -->
+  <section class="slide l-grid pad g-sand" data-section="Components" data-title="Cards">
+    <p class="eyebrow fx fx-1">Component · card</p>
+    <h2 class="d-md fx fx-2" style="margin:1.2cqh 0 3.4cqh">Five card treatments</h2>
+    <div class="cols-5 fx-auto">
+      <div class="card fx"><p class="card__title">Default</p><p class="card__body">Parchment ground.</p><p class="card__foot">.card</p></div>
+      <div class="card card-top fx"><p class="card__title">Top rule</p><p class="card__body">Gold rule above.</p><p class="card__foot">.card-top</p></div>
+      <div class="card card-navy fx"><p class="card__title">Navy</p><p class="card__body">Dark ground.</p><p class="card__foot">.card-navy</p></div>
+      <div class="card card-gold fx"><p class="card__title">Gold</p><p class="card__body">The loud one.</p><p class="card__foot">.card-gold</p></div>
+      <div class="card card-line fx"><p class="card__title">Outline</p><p class="card__body">No fill.</p><p class="card__foot">.card-line</p></div>
+    </div>
+    <div class="lib-tag"><b>32</b> &nbsp;.card &nbsp;·&nbsp; -top -navy -gold -line -sand</div>
+  </section>
+
+  <!-- 22 · TIMELINE + PROCESS -->
+  <section class="slide l-grid pad" data-section="Components" data-title="Timeline and process">
+    <p class="eyebrow fx fx-1">Component · sequence</p>
+    <h2 class="d-md fx fx-2" style="margin:1.2cqh 0 4cqh">Timeline and process</h2>
+    <div class="tl fx-auto">
+      <div class="tl__node fx"><p class="tl__date">2019</p><p class="tl__label">Baseline</p><p class="tl__body">The last normal year.</p></div>
+      <div class="tl__node fx"><p class="tl__date">2020</p><p class="tl__label">The stop</p><p class="tl__body">Visitation halves.</p></div>
+      <div class="tl__node fx"><p class="tl__date">2022</p><p class="tl__label">Recovery</p><p class="tl__body">Domestic clears 2019.</p></div>
+      <div class="tl__node fx"><p class="tl__date">2025</p><p class="tl__label">New shape</p><p class="tl__body">Record spend, shorter stays.</p></div>
+    </div>
+    <div class="process fx-auto" style="margin-top:6cqh">
+      <div class="process__step fx"><span class="process__n">1</span><p class="process__title">Listen</p><p class="process__body">Find where demand already is.</p></div>
+      <div class="process__step fx"><span class="process__n">2</span><p class="process__title">Focus</p><p class="process__body">Pick the two that will move.</p></div>
+      <div class="process__step fx"><span class="process__n">3</span><p class="process__title">Fund</p><p class="process__body">Move budget to match.</p></div>
+      <div class="process__step fx"><span class="process__n">4</span><p class="process__title">Measure</p><p class="process__body">One number, quarterly.</p></div>
+    </div>
+    <div class="lib-tag"><b>33</b> &nbsp;.tl &nbsp;·&nbsp; .tl-v &nbsp;·&nbsp; .process</div>
+  </section>
+
+  <!-- 23 · COMPARISON + TABLE -->
+  <section class="slide l-grid pad g-parchment" data-section="Components" data-title="Comparison and table">
+    <p class="eyebrow fx fx-1">Component · compare</p>
+    <h2 class="d-md fx fx-2" style="margin:1.2cqh 0 3.4cqh">Versus, and a table</h2>
+    <div class="cols-2" style="gap:4cqw;align-items:start">
+      <div class="vs fx fx-3">
+        <div class="vs__col vs__col-a"><p class="vs__head">Today</p>
+          <ul class="vs__list vs__list-no"><li>Peak-season spend</li><li>Broad-reach media</li><li>Annual measurement</li></ul></div>
+        <div class="vs__div"></div>
+        <div class="vs__col vs__col-b"><p class="vs__head">Next</p>
+          <ul class="vs__list vs__list-yes"><li>Shoulder-season spend</li><li>Intent-led media</li><li>Quarterly measurement</li></ul></div>
+      </div>
+      <table class="qtable fx fx-4">
+        <thead><tr><th>Market</th><th class="num">Visitors</th><th class="num">Change</th></tr></thead>
+        <tbody>
+          <tr class="is-hero"><td>Texas</td><td class="num">4.1M</td><td class="num t-pos">+14%</td></tr>
+          <tr><td>California</td><td class="num">3.8M</td><td class="num t-pos">+3%</td></tr>
+          <tr><td>Illinois</td><td class="num">2.2M</td><td class="num t-neg">−2%</td></tr>
+          <tr><td>Florida</td><td class="num">1.9M</td><td class="num t-pos">+9%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="lib-tag"><b>34</b> &nbsp;.vs &nbsp;·&nbsp; .qtable &nbsp;·&nbsp; tr.is-hero</div>
+  </section>
+
+  <!-- 24 · MATRIX -->
+  <section class="slide l-split l-split-60 g-sand" data-section="Components" data-title="Matrix">
+    <div class="split-pane">
+      <p class="eyebrow fx fx-1">Component · matrix</p>
+      <h2 class="d-md fx fx-2" style="margin:1.2cqh 0 2.4cqh">Where we sit</h2>
+      <p class="body-med fx fx-3">A 2×2 for positioning. Points are placed with
+        <code>--x</code> and <code>--y</code> as percentages; <code>.matrix__pt-us</code> is the one that matters.</p>
+    </div>
+    <div class="split-pane">
+      <div class="matrix fx fx-4" style="margin:4cqh 3cqw">
+        <span class="matrix__axis matrix__axis-x">Awareness</span>
+        <span class="matrix__axis matrix__axis-y">Intent</span>
+        <span class="matrix__pt" style="--x:22;--y:71">Utah</span>
+        <span class="matrix__pt" style="--x:64;--y:33">Montana</span>
+        <span class="matrix__pt" style="--x:38;--y:24">Wyoming</span>
+        <span class="matrix__pt matrix__pt-us" style="--x:74;--y:76">Colorado</span>
+      </div>
+    </div>
+    <div class="lib-tag"><b>35</b> &nbsp;.matrix &nbsp;·&nbsp; .matrix__pt-us</div>
+  </section>
+
+  <!-- 25 · QUOTE -->
+  <section class="slide l-quote g-navy" data-section="Components" data-title="Quote">
+    <div class="quote-inner">
+      <blockquote class="quote">
+        <p class="quote__text fx fx-1">The visitor did not stop coming. They started deciding later, and they started deciding somewhere we were not looking.</p>
+        <p class="quote__cite fx fx-2">Name Surname · Title, Organisation</p>
+      </blockquote>
+    </div>
+    <div class="lib-tag"><b>36</b> &nbsp;.quote &nbsp;·&nbsp; Roboto Slab Light</div>
+  </section>
+
+  <!-- 26 · INTERACTIVE — flip + hotspot -->
+  <section class="slide l-grid pad" data-section="Interactive" data-title="Flip cards and hotspots">
+    <p class="eyebrow fx fx-1">Interactive · click these</p>
+    <h2 class="d-md fx fx-2" style="margin:1.2cqh 0 3cqh">Flip cards and image hotspots</h2>
+    <div class="cols-2" style="gap:3cqw;align-items:stretch">
+      <div class="cols-2" style="gap:1.6cqw">
+        <div class="flip fx fx-3" style="height:44cqh">
+          <div class="flip__inner">
+            <div class="flip__front"><p class="card__num">Q</p><p class="card__title">What share of trips now start on a phone?</p><span class="flip__hint">Click</span></div>
+            <div class="flip__back"><p class="stat__num" style="color:var(--gold)">71%</p><p class="card__body">and it was 44% in 2019.</p></div>
+          </div>
+        </div>
+        <div class="flip fx fx-4" style="height:44cqh">
+          <div class="flip__inner">
+            <div class="flip__front"><p class="card__num">Q</p><p class="card__title">How far ahead does the median visitor book?</p><span class="flip__hint">Click</span></div>
+            <div class="flip__back"><p class="stat__num" style="color:var(--gold)">18</p><p class="card__body">days. Down from thirty-one.</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="hot-wrap media fx fx-5" style="height:44cqh">
+        <img src="../deck/img/photo/co-b.jpg" alt="" />
+        <span class="hot" style="--x:28;--y:38"><span class="hot__dot"></span>
+          <span class="hot__card">A hotspot note. One opens at a time.</span></span>
+        <span class="hot hot-left" style="--x:72;--y:64"><span class="hot__dot"></span>
+          <span class="hot__card">Anchored left when it would run off the edge.</span></span>
+      </div>
+    </div>
+    <div class="lib-tag"><b>37</b> &nbsp;.flip &nbsp;·&nbsp; .hot &nbsp;·&nbsp; .hot-wrap</div>
+    <aside class="notes"><p>Both reset when you leave the slide, so coming back shows what
+    the room saw first. Flip cards print their front face only; hotspot notes print inline.</p></aside>
+  </section>
+
+  <!-- 27 · TABS -->
+  <section class="slide l-grid pad g-sand" data-section="Interactive" data-title="Tabs">
+    <p class="eyebrow fx fx-1">Interactive · tabs</p>
+    <h2 class="d-md fx fx-2" style="margin:1.2cqh 0 3cqh">Parallel content, one slide</h2>
+    <div class="tabs fx fx-3">
+      <div class="tabs__rail" role="tablist">
+        <button class="tabs__tab is-on" data-tab="a" role="tab" aria-selected="true">Mountains</button>
+        <button class="tabs__tab" data-tab="b" role="tab" aria-selected="false">Front Range</button>
+        <button class="tabs__tab" data-tab="c" role="tab" aria-selected="false">Western Slope</button>
+      </div>
+      <div class="tabs__panels">
+        <div class="tabs__panel is-on" data-panel="a">
+          <figure class="chart" data-chart="column" style="height:48cqh">
+            <script type="application/json">{"categories":["Q1","Q2","Q3","Q4"],"series":[{"name":"Mountains","data":[31,14,28,22]}],"suffix":"%"}</script></figure>
+        </div>
+        <div class="tabs__panel" data-panel="b">
+          <figure class="chart" data-chart="column" style="height:48cqh">
+            <script type="application/json">{"categories":["Q1","Q2","Q3","Q4"],"series":[{"name":"Front Range","data":[19,26,34,21]}],"suffix":"%"}</script></figure>
+        </div>
+        <div class="tabs__panel" data-panel="c">
+          <figure class="chart" data-chart="column" style="height:48cqh">
+            <script type="application/json">{"categories":["Q1","Q2","Q3","Q4"],"series":[{"name":"Western Slope","data":[12,22,41,25]}],"suffix":"%"}</script></figure>
+        </div>
+      </div>
+    </div>
+    <div class="lib-tag"><b>38</b> &nbsp;.tabs &nbsp;·&nbsp; charts draw on first open</div>
+    <aside class="notes"><p>A chart in a closed panel has no layout box and cannot be drawn.
+    The engine draws it the first time its panel opens — which is why a tabbed chart never
+    appears blank.</p></aside>
+  </section>
+
+  <!-- 28 · GROUNDS -->
+  <section class="slide l-grid pad" data-section="Foundations" data-title="Grounds">
+    <p class="eyebrow fx fx-1">Foundations · grounds</p>
+    <h2 class="d-md fx fx-2" style="margin:1.2cqh 0 3cqh">Seven grounds, one component set</h2>
+    <div class="cols-4 fx-auto" style="gap:1.4cqw">
+      <div class="card fx" style="background:var(--paper);border:1px solid var(--hairline)"><p class="card__title">Paper</p><p class="card__foot">default</p></div>
+      <div class="card fx" style="background:var(--sand)"><p class="card__title">Sand</p><p class="card__foot">.g-sand</p></div>
+      <div class="card fx" style="background:var(--parchment)"><p class="card__title">Parchment</p><p class="card__foot">.g-parchment</p></div>
+      <div class="card fx" style="background:var(--gold);color:var(--navy-ink)"><p class="card__title">Gold</p><p class="card__foot">.g-gold</p></div>
+      <div class="card fx" style="background:var(--navy-ink);color:var(--snow)"><p class="card__title">Navy</p><p class="card__foot">.g-navy</p></div>
+      <div class="card fx" style="background:var(--mountain);color:#fff"><p class="card__title">Mountain</p><p class="card__foot">.g-mountain</p></div>
+      <div class="card fx" style="background:var(--red);color:#fff"><p class="card__title">Red</p><p class="card__foot">.g-red</p></div>
+      <div class="card fx" style="background:var(--ink);color:var(--parchment)"><p class="card__title">Ink</p><p class="card__foot">.g-ink</p></div>
+    </div>
+    <p class="body-sm fx fx-10" style="margin-top:3.4cqh;max-width:74%;color:var(--ink-soft)">
+      A ground sets <code>--ink</code>, <code>--hairline</code> and the chart ramp for everything inside it.
+      That is why one card, one table and one chart work on all seven without a per-slide override.</p>
+    <div class="lib-tag"><b>39</b> &nbsp;.g-* &nbsp;·&nbsp; grounds re-map the tokens</div>
+  </section>
+
+  <!-- 29 · TYPE SCALE -->
+  <section class="slide l-grid pad g-parchment" data-section="Foundations" data-title="Type scale">
+    <p class="eyebrow fx fx-1">Foundations · type</p>
+    <div class="cols-2" style="gap:4cqw;align-items:start;margin-top:2cqh">
+      <div class="stack stack-sm">
+        <p class="d-xl fx fx-2">D-XL</p>
+        <p class="d-lg fx fx-3">D-LG Headline</p>
+        <p class="d-md fx fx-4">D-MD Headline</p>
+        <p class="d-sm fx fx-5">D-SM Headline</p>
+        <p class="eyebrow fx fx-6">Eyebrow · Roboto Slab · tracked caps</p>
+      </div>
+      <div class="stack stack-sm">
+        <p class="body-xl fx fx-3">Body XL — 3.1cqh</p>
+        <p class="body-lead fx fx-4">Body lead — 2.6cqh. The default for a paragraph on a content slide.</p>
+        <p class="body-med fx fx-5">Body med — 2.3cqh. For lists and cards.</p>
+        <p class="body-sm fx fx-6">Body sm — 2.05cqh. The floor for anything read across a room.</p>
+        <p class="caption fx fx-7">Caption — 1.7cqh. Sources and notes only.</p>
+        <hr class="rule-thin fx fx-8" style="margin:1cqh 0" />
+        <p class="body-sm fx fx-9" style="color:var(--ink-soft)">Display is <b>Bebas Neue</b>, body is
+          <b>Helvetica Neue</b> (Inter where it is missing), accents are <b>Roboto Slab</b> — the three
+          faces the template itself embeds.</p>
+      </div>
+    </div>
+    <div class="lib-tag"><b>40</b> &nbsp;type scale &nbsp;·&nbsp; 2.0cqh is the floor</div>
+  </section>
+
+  <!-- 30 · CLOSER -->
+  <section class="slide l-closer" data-section="Structure" data-title="Closer — Q&amp;A" data-hud="light">
+    <div class="media-full wash-flat"><img src="../deck/img/photo/co-d.jpg" alt="" class="fx fx--bleed" /></div>
+    <div class="closer-inner" style="color:#fff">
+      <p class="d-mega fx fx-1">Thank you</p>
+      <hr class="rule-gold fx fx-2" style="margin:3cqh auto;width:12cqw" />
+      <p class="body-lead fx fx-3">Questions</p>
+      <div class="mark md knock fx fx-4" style="margin:5cqh auto 0;display:flex;justify-content:center">
+        <img src="../brand/logos/govconf.png" alt="Colorado Governor's Conference on Tourism" /></div>
+    </div>
+    <div class="lib-tag"><b>41</b> &nbsp;l-closer &nbsp;·&nbsp; .mark.knock</div>
+  </section>
+
+  </div><!-- /stage -->
+
+  <div class="hud">
+    <div class="hud-left"><span class="pip"></span><span id="hud-section">—</span></div>
+    <div class="hud-right"><span id="hud-slide">01 / 41</span></div>
+  </div>
+</div>
+
+<div class="help" id="help">
+  <kbd>←</kbd><kbd>→</kbd> move &nbsp; <kbd>N</kbd> index &nbsp; <kbd>S</kbd> notes &nbsp; <kbd>F</kbd> full screen
+</div>
+
+<script src="../engine/charts.js"></script>
+<script src="../engine/deck.js"></script>
+<script src="../engine/interactive.js"></script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+/* ============================================================
+   FONTS — self-hosted, no network at presentation time.
+
+   The Governor's Conference template embeds Bebas Neue, Helvetica
+   Neue and Roboto Slab (see ppt/fonts/*.fntdata). We match that:
+
+     Bebas Neue   display / headlines — the template's condensed caps
+     Helvetica Neue  body — native on macOS, where this deck is presented.
+                     Inter is the self-hosted stand-in everywhere else;
+                     it shares Helvetica's humanist grotesque proportions
+                     so line breaks hold either way.
+     Roboto Slab  accents — eyebrows, pull quotes, data callouts
+
+   Inter and Roboto Slab ship as variable fonts: one file covers the
+   whole weight range, which is why there is no -700 file to find.
+   ============================================================ */
+
+@font-face {
+  font-family: 'Bebas Neue';
+  src: url('bebas-neue-400.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('inter-var.woff2') format('woff2-variations'),
+       url('inter-var.woff2') format('woff2');
+  font-weight: 100 900; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Roboto Slab';
+  src: url('robotoslab-var.woff2') format('woff2-variations'),
+       url('robotoslab-var.woff2') format('woff2');
+  font-weight: 100 900; font-style: normal; font-display: swap;
+}
