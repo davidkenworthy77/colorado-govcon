@@ -1082,3 +1082,50 @@
 .foot-marks__rule { width: 1px; height: 5cqh; background: var(--hairline-strong); }
 .l-sep .foot-marks__rule, .l-title .foot-marks__rule,
 [data-hud="light"] .foot-marks__rule { background: rgba(255,255,255,.45); }
+
+/* ---- Thesis slide: statement left, hub diagram right (slide 8) ---- */
+.thesis {
+  position: absolute; inset: 0 3.6cqw 12cqh 6cqw;
+  display: grid; grid-template-columns: 37% 1fr; gap: 2.4cqw; align-items: center;
+}
+.thesis__text { min-width: 0; }
+.hub { width: 100%; height: auto; max-height: 76cqh; display: block; overflow: visible; }
+.hub__halo  { fill: var(--navy-ink); opacity: .1; }
+.hub__core  { fill: var(--navy-ink); }
+.hub__spoke { stroke: var(--navy-ink); stroke-width: 2; opacity: .35; }
+.hub__dot   { fill: var(--navy-ink); }
+.hub__star  { fill: var(--red); }
+.hub__label, .hub__core-label {
+  font-family: var(--f-mono); font-weight: 500; font-size: 25px;
+  letter-spacing: .2em; text-transform: uppercase;
+}
+.hub__label { fill: var(--navy-ink); }
+.hub__core-label { fill: var(--parchment); font-size: 23px; }
+.hub .fx { transform-box: fill-box; transform-origin: center; }
+
+/* ---- Rival set (slide 15): stat and table as one centred composition ---- */
+.rival {
+  display: grid; grid-template-columns: 30% 1fr; gap: 4cqw; align-items: center;
+}
+.rival__stat, .rival__table { min-width: 0; }
+.rival-table { width: 100%; border-collapse: collapse; font-family: var(--f-body); }
+.rival-table th {
+  text-align: left; font-weight: 300; font-size: 1.8cqh; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--ink-mute);
+  padding: 0 1.6cqw 1.2cqh 0; border-bottom: 2px solid var(--hairline-strong);
+}
+.rival-table td {
+  font-size: 2.6cqh; padding: 1.7cqh 1.6cqw 1.7cqh 0;
+  border-bottom: 1px solid var(--hairline); vertical-align: baseline;
+}
+.rival-table td:first-child { font-weight: 700; white-space: nowrap; }
+.rival-table td:last-child { color: var(--ink-soft); padding-right: 0; }
+
+/* ---- Bullets in the comparison cards (slide 18) ---- */
+.cmp-card__l li { position: relative; padding-left: 1.3cqw; }
+.cmp-card__l li::before {
+  content: ""; position: absolute; left: 0; top: .72em;
+  width: .7cqh; height: .7cqh; border-radius: 50%;
+  background: var(--gold); transform: translateY(-50%);
+}
+.cmp-card--muted .cmp-card__l li::before { background: var(--ink-mute); }
