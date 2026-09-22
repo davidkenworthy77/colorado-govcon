@@ -1220,3 +1220,16 @@
   content: ""; position: absolute; inset: 0 0 auto 0; height: 30%; z-index: 1;
   background: linear-gradient(180deg, rgba(22,41,67,.7) 0%, rgba(22,41,67,0) 100%);
 }
+
+/* ---- Closing lockup: MMGY and the conference, large and centred ----
+   The last thing on screen, so the two marks get real size and a shared
+   baseline, low on the slide where they frame the close rather than
+   compete with "Be the answer." */
+.close-marks {
+  position: absolute; left: 0; right: 0; bottom: 6cqh; z-index: 3;
+  display: flex; align-items: center; justify-content: center; gap: 2.6cqw;
+}
+.close-marks img { display: block; width: auto; }
+.close-marks__mmgy { height: 9cqh; }
+.close-marks__gc   { height: 11cqh; }
+.close-marks__rule { width: 2px; height: 9cqh; background: rgba(255,255,255,.55); }
