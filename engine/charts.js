@@ -15,7 +15,7 @@
    Types
      column · bar · stacked · line · area · slope · scatter
      donut · gauge · progress · funnel · waffle · pictogram
-     gantt · dumbbell · heatmap · sparkline
+     gantt · dumbbell · heatmap · sparkline · race · treemap
 
    SIZING — why there is no width/height in the config
    ---------------------------------------------------
@@ -515,6 +515,110 @@ window.DeckCharts = (() => {
         class: "ch-value", fill: hero ? "var(--gold-ink)" : null });
       if (go) { anim(name, "ch-fade", 1.1 + i * 0.08); anim(val, "ch-fade", 1.15 + i * 0.08); }
       svg.appendChild(name); svg.appendChild(val);
+    });
+  };
+
+  /* ---- TREEMAP — parts of a whole, where one part dominates ----
+     Each box's AREA is its share, so a 55% slice is visibly more than
+     half the chart: the thing a bar chart of shares cannot make you feel.
+     Squarified layout (Bruls, Huizing and van Wijk): rows are grown while
+     each new box keeps the row's worst aspect ratio improving, which keeps
+     boxes close to square and therefore comparable by eye.
+
+       data   [{name, value, tone}]   sorted largest first automatically
+       suffix appended to the value label
+
+     Labels degrade with the box: name and value, then value alone, then
+     nothing. A label never spills out of its box. */
+  TYPES.treemap = (svg, cfg, W, H, go) => {
+    const items = (cfg.data || []).filter(d => d.value > 0).slice().sort((a, b) => b.value - a.value);
+    if (!items.length) return;
+    const total = items.reduce((a, d) => a + d.value, 0);
+    const gap = cfg.gap ?? 5;
+    let rect = { x: 0, y: 0, w: W, h: H };
+    const scale = (W * H) / total;
+    const nodes = items.map(d => ({ ...d, area: d.value * scale }));
+    const out = [];
+
+    const worst = (row, side) => {
+      const sum = row.reduce((a, n) => a + n.area, 0);
+      const mx = Math.max(...row.map(n => n.area)), mn = Math.min(...row.map(n => n.area));
+      return Math.max((side * side * mx) / (sum * sum), (sum * sum) / (side * side * mn));
+    };
+    const layRow = (row) => {
+      const sum = row.reduce((a, n) => a + n.area, 0);
+      const horiz = rect.w >= rect.h;               /* lay the row along the short side */
+      if (horiz) {
+        const rw = sum / rect.h; let y = rect.y;
+        row.forEach(n => { const h = n.area / rw; out.push({ ...n, x: rect.x, y, w: rw, h }); y += h; });
+        rect = { x: rect.x + rw, y: rect.y, w: rect.w - rw, h: rect.h };
+      } else {
+        const rh = sum / rect.w; let x = rect.x;
+        row.forEach(n => { const w = n.area / rh; out.push({ ...n, x, y: rect.y, w, h: rh }); x += w; });
+        rect = { x: rect.x, y: rect.y + rh, w: rect.w, h: rect.h - rh };
+      }
+    };
+    let row = [];
+    nodes.forEach(n => {
+      const side = Math.min(rect.w, rect.h);
+      if (!row.length || worst(row.concat(n), side) <= worst(row, side)) row.push(n);
+      else { layRow(row); row = [n]; }
+    });
+    if (row.length) layRow(row);
+
+    out.forEach((b, k) => {
+      const tone = b.tone ?? (k === 0 ? 0 : 4);
+      const x = b.x + gap / 2, y = b.y + gap / 2, w = Math.max(0, b.w - gap), h = Math.max(0, b.h - gap);
+      /* `shade` grades the supporting boxes (0 to 1 of the ink colour) so
+         neighbours read as separate without each claiming a brand colour. */
+      const fill = b.shade != null
+        ? `color-mix(in srgb, currentColor ${Math.round(b.shade * 100)}%, transparent)` : color(tone);
+      const r = el("rect", { x, y, width: w, height: h, style: "fill:" + fill });
+      if (go) anim(r, "ch-pop", 0.06 * k);
+      svg.appendChild(r);
+
+      const ink = b.shade != null ? (b.shade > 0.55 ? "#fff" : "var(--ink)") : onFill(tone);
+      const val = fmt(b.value, cfg);
+      const pad = 14;
+      /* Wrap the name onto as many as three lines, trying smaller sizes
+         until name and value both fit inside the box. */
+      const wrap = (str, size) => {
+        const per = Math.max(1, Math.floor((w - pad * 2) / (size * 0.56)));
+        const lines = []; let cur = "";
+        String(str).split(" ").forEach(word => {
+          const t = cur ? cur + " " + word : word;
+          if (t.length <= per) cur = t; else { if (cur) lines.push(cur); cur = word; }
+        });
+        if (cur) lines.push(cur);
+        return lines.every(l => l.length <= per) ? lines : null;
+      };
+      let fit = null;
+      const fs = cfg.fontScale ?? 1;
+      for (let size = Math.min(30 * fs, Math.sqrt(w * h) / 9 * fs); size >= 11; size -= 1) {
+        const lines = wrap(b.name, size);
+        const need = pad * 2 + (lines ? lines.length : 9) * size * 1.18 + size * 1.25;
+        if (lines && lines.length <= 3 && need <= h) { fit = { size, lines }; break; }
+      }
+      if (fit) {
+        const { size, lines } = fit;
+        lines.forEach((l, li) => {
+          const t = txt(x + pad, y + pad + size * 0.9 + li * size * 1.18, l,
+            { anchor: "start", size, class: "ch-cat", fill: ink });
+          if (go) anim(t, "ch-fade", 0.4 + 0.06 * k);
+          svg.appendChild(t);
+        });
+        const t2 = txt(x + pad, y + pad + size * 0.9 + lines.length * size * 1.18 + size * 0.2, val,
+          { anchor: "start", size: size * 1.05, class: "ch-value", fill: ink });
+        if (go) anim(t2, "ch-fade", 0.45 + 0.06 * k);
+        svg.appendChild(t2);
+      } else {
+        const vs = Math.max(11, Math.min(22 * (cfg.fontScale ?? 1), Math.sqrt(w * h) / 7 * (cfg.fontScale ?? 1)));
+        if (val.length * vs * 0.6 + pad * 1.6 <= w && vs + pad * 1.6 <= h) {
+          const t2 = txt(x + pad * 0.8, y + pad * 0.8 + vs * 0.85, val, { anchor: "start", size: vs, class: "ch-value", fill: ink });
+          if (go) anim(t2, "ch-fade", 0.45 + 0.06 * k);
+          svg.appendChild(t2);
+        }
+      }
     });
   };
 

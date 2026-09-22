@@ -63,14 +63,7 @@ window.Deck = (() => {
     });
     stepState.set(slide, { max, at: 0 });
 
-    /* The indicator is presenter furniture, not content, so the engine adds
-       it rather than every build slide having to remember the div. */
-    let ticks = slide.querySelector('.build-ticks');
-    if (!ticks && max > 0) {
-      ticks = document.createElement('div');
-      ticks.className = 'build-ticks';
-      slide.appendChild(ticks);
-    }
+    const ticks = slide.querySelector('.build-ticks');
     if (ticks && max > 0) {
       ticks.innerHTML = '';
       for (let n = 0; n < max; n++) {
@@ -105,6 +98,27 @@ window.Deck = (() => {
     if (window.DeckCharts) window.DeckCharts.refresh(slide);
   }
 
+  /* ---------- click counter in the HUD ----------
+     One dot per click on the current slide, filled as each lands, next to
+     the slide number. It lives in the presenter bar rather than on the
+     slide so it is always in the same place, always visible, and never
+     part of the design the room is looking at. */
+  let hudSteps = document.getElementById('hud-steps');
+  if (!hudSteps && counterEl) {
+    hudSteps = document.createElement('span');
+    hudSteps.id = 'hud-steps';
+    hudSteps.className = 'hud-steps';
+    counterEl.after(hudSteps);
+  }
+  function renderHudSteps() {
+    if (!hudSteps) return;
+    const st = stepState.get(slides[i]);
+    if (!st || !st.max) { hudSteps.innerHTML = ''; return; }
+    hudSteps.innerHTML = Array.from({ length: st.max },
+      (_, k) => `<i class="${k < st.at ? 'is-on' : ''}"></i>`).join('');
+    hudSteps.title = `${st.max - st.at} of ${st.max} clicks left on this slide`;
+  }
+
   const stepsLeft = slide => {
     const st = stepState.get(slide);
     return st ? st.max - st.at : 0;
@@ -114,6 +128,7 @@ window.Deck = (() => {
     if (!st) return;
     st.at = Math.max(0, Math.min(st.max, at));
     applySteps(slide);
+    if (slide === slides[i]) renderHudSteps();
   }
 
   /* ---------- live countdown ----------
@@ -304,6 +319,7 @@ window.Deck = (() => {
     if (counterEl) counterEl.textContent = `${pad(i + 1)} / ${pad(total)}`;
     if (progress)  progress.style.width = (total > 1 ? i / (total - 1) * 100 : 100) + '%';
     if (hudEl)     hudEl.dataset.mode = cur.dataset.hud || '';
+    renderHudSteps();
     writeHash();
     markNav();
     document.dispatchEvent(new CustomEvent('deck:change', { detail: { index: i, slide: cur } }));

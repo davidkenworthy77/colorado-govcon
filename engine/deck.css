@@ -500,3 +500,31 @@ body.notes-mode { overflow: auto; background: #fff; color: #3F3F3F; height: auto
   body.notes-mode { background: #fff; }
   .notes-doc { padding: 0; max-width: none; }
 }
+
+/* ---------- click counter (HUD) ----------
+   Next to the slide number: one ring per click on this slide, filled
+   gold as each click lands. Empty on slides without a build. The old
+   per-slide ticks are retired in favour of this. */
+.build-ticks { display: none !important; }
+.hud-steps { display: inline-flex; align-items: center; gap: 0.7em; margin-left: 0.9em; }
+.hud-steps:empty { display: none; }
+.hud-steps i {
+  width: 1.45em; height: 1.45em; border-radius: 50%;
+  border: 0.18em solid currentColor; opacity: .75; box-sizing: border-box;
+  transition: background-color .25s, border-color .25s, opacity .25s;
+}
+.hud-steps i.is-on { background: var(--brand-primary-bright); border-color: var(--brand-primary-bright); opacity: 1; }
+@media print { .hud-steps { display: none !important; } }
+
+/* ---------- fx--pop ----------
+   A playful reveal: rises, overshoots a touch and settles, with a small
+   tilt that straightens out. For tiles and cards, not for type. */
+@keyframes fx-pop {
+  0%   { opacity: 0; transform: translateY(9cqh) rotate(-5deg) scale(.9); }
+  60%  { opacity: 1; transform: translateY(-1.2cqh) rotate(1.2deg) scale(1.02); }
+  100% { opacity: 1; transform: none; }
+}
+.slide.active .fx.fx--pop { animation-name: fx-pop; animation-duration: .8s; }
+.slide.active[data-steps] [data-step][data-step-on].fx--pop {
+  animation-name: fx-pop; animation-duration: .8s; animation-timing-function: cubic-bezier(.2,.8,.25,1);
+}
