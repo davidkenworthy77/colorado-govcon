@@ -1,7 +1,7 @@
 # Marketing to Your Most Important Ambassador: AI
 
 David Kenworthy, MMGY. Colorado Governor's Tourism Conference, Breckenridge,
-September 2026. A 35 minute talk, 33 slides, no Q&A.
+September 2026. A 35 minute talk, 32 slides, no Q&A.
 
 A digital deck, built as code. Full screen at 16:9, animates as you click, works
 as a shared link, exports to PDF. No build step, no framework, no network at
@@ -18,7 +18,8 @@ Then <http://localhost:4477/> — the launcher links to both:
 
 | | |
 |---|---|
-| **`deck/`** | the talk, 33 slides |
+| **`deck/`** | the talk, 32 slides |
+| **`deck/archive.html`** | slides taken out of the talk, still working |
 | **`library/`** | every layout, component and chart, live. **Start here when building.** |
 
 You can also open `deck/index.html` straight from Finder. The one thing that
@@ -55,21 +56,21 @@ already seen.
 
 Built from `ambassador-deck-wireframe.pptx` (content and order) and
 `ambassador-deck-companion.md` (context, data and rules). Speaker notes are
-verbatim from the wireframe on all 33 slides; press **S** to read them, **P**
+verbatim from the wireframe; press **S** to read them, **P**
 to print the whole talk track.
 
 Six beats, matching the companion's narrative spine:
 
 | Slides | Block |
 |---|---|
-| 1 to 2 | Open |
-| 3 to 9 | The ambassador you didn't hire |
-| 10 to 19 | Part 1, how it decides |
-| 20 to 25 | What it says about Colorado |
-| 26 to 27 | Part 2, how we measure |
-| 28 to 33 | Part 3, how we win |
+| 1 | Open |
+| 2 to 8 | The ambassador you didn't hire |
+| 9 to 18 | Part 1, how it decides |
+| 19 to 24 | What it says about Colorado |
+| 25 to 26 | Part 2, how we measure |
+| 27 to 32 | Part 3, how we win |
 
-Ten native charts, four click-through builds (6, 17, 29, 33), numbers that count
+Ten native charts, click-through builds (5, 10, 11, 12, 16, 17, 28, 32), numbers that count
 up on arrival. Nothing is an image of a chart.
 
 On a build slide the engine adds a small progress indicator just above the
@@ -99,11 +100,10 @@ python3 tools/check-rules.py
 
 ### Before this ships
 
-Two things left to settle, repeated at the top of `deck/index.html`:
+One thing left to settle, repeated at the top of `deck/index.html`:
 
 1. **Slide 3** adoption curve is external and unverified. The two usage
    figures are sourced (OpenAI, June 2026; Google, August 2026).
-2. **Slide 7** is optional. Delete the section to cut it.
 
 ## Where things came from
 
@@ -134,6 +134,7 @@ accent.
 ```
 index.html            launcher
 deck/index.html       THE DECK — one file, one <section class="slide"> per slide
+deck/archive.html     parked slides, same engine; copy a <section> back to restore it
 library/index.html    the pattern catalogue, 41 slides. Every pattern, live.
 
 engine/               presentation chrome. Brand-agnostic, no colours in here.
