@@ -506,14 +506,14 @@ body.notes-mode { overflow: auto; background: #fff; color: #3F3F3F; height: auto
    gold as each click lands. Empty on slides without a build. The old
    per-slide ticks are retired in favour of this. */
 .build-ticks { display: none !important; }
-.hud-steps { display: inline-flex; align-items: center; gap: 0.7em; margin-left: 0.9em; }
+.hud-steps { display: inline-flex; align-items: center; gap: 0.5em; margin-left: 1em; }
 .hud-steps:empty { display: none; }
 .hud-steps i {
-  width: 1.45em; height: 1.45em; border-radius: 50%;
-  border: 0.18em solid currentColor; opacity: .75; box-sizing: border-box;
-  transition: background-color .25s, border-color .25s, opacity .25s;
+  width: 2.1em; height: 0.34em; border-radius: 0.17em;
+  background: currentColor; opacity: .45;
+  transition: background-color .25s, opacity .25s;
 }
-.hud-steps i.is-on { background: var(--brand-primary-bright); border-color: var(--brand-primary-bright); opacity: 1; }
+.hud-steps i.is-on { background: var(--brand-primary-bright); opacity: 1; }
 @media print { .hud-steps { display: none !important; } }
 
 /* ---------- fx--pop ----------
