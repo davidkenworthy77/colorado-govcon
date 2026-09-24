@@ -363,23 +363,60 @@ window.DeckCharts = (() => {
         svg.appendChild(txt(padL - 18, y + 7, fmt(v, cfg), { anchor: "end", size: 20 }));
       }
     }
-    svg.appendChild(el("line", { x1: padL, x2: W, y1: y0, y2: y0, class: "ch-axis" }));
+    svg.appendChild(el("line", { x1: padL, x2: cfg.hero != null ? X(cats.length - 1) : W, y1: y0, y2: y0,
+                                 class: cfg.hero != null ? "ch-grid" : "ch-axis" }));
+
+    /* `hero` (a series index) switches to the spotlight style: that one
+       line goes thick, gold-filled and dotted at its end, and every other
+       series drops to a thin neutral stroke with a mono label, so the chart
+       reads as one line and its context. Drawn last, so it sits on top.
+       `smooth` bends the polyline through its points (Catmull-Rom). */
+    const hero = cfg.hero;
+    const spot = hero != null;
+    const isHero = si => spot && si === hero;
+    const pathOf = pts => {
+      if (!cfg.smooth || pts.length < 3) return pts.map((p, i) => (i ? "L" : "M") + p[0] + " " + p[1]).join(" ");
+      let d = `M${pts[0][0]} ${pts[0][1]}`;
+      for (let i = 0; i < pts.length - 1; i++) {
+        const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+        d += ` C${p1[0] + (p2[0] - p0[0]) / 6} ${p1[1] + (p2[1] - p0[1]) / 6}`
+           + ` ${p2[0] - (p3[0] - p1[0]) / 6} ${p2[1] - (p3[1] - p1[1]) / 6} ${p2[0]} ${p2[1]}`;
+      }
+      return d;
+    };
+    const order = list.map((s, si) => [s, si]);
+    if (spot) order.sort((a, b) => isHero(a[1]) - isHero(b[1]));
 
     const endLabels = [];
-    list.forEach((s, si) => {
+    order.forEach(([s, si], k) => {
       const pts = s.data.map((v, i) => [X(i), Y(v)]);
-      const d = pts.map((p, i) => (i ? "L" : "M") + p[0] + " " + p[1]).join(" ");
-      if (type === "area") {
+      const d = pathOf(pts);
+      const tone = color(s.tone ?? si);
+      if (isHero(si)) {
+        const id = "chg" + Math.random().toString(36).slice(2, 8);
+        const defs = el("defs");
+        const g = el("linearGradient", { id, x1: 0, y1: 0, x2: 0, y2: 1 });
+        g.appendChild(el("stop", { offset: "0", "stop-color": tone, "stop-opacity": 0.30 }));
+        g.appendChild(el("stop", { offset: "1", "stop-color": tone, "stop-opacity": 0.03 }));
+        defs.appendChild(g);
+        svg.appendChild(defs);
+        const a = el("path", {
+          d: `${d} L ${X(pts.length - 1)} ${y0} L ${X(0)} ${y0} Z`, fill: `url(#${id})`
+        });
+        if (go) anim(a, "ch-fade", 0.9);
+        svg.appendChild(a);
+      } else if (type === "area") {
         const a = el("path", {
           d: `${d} L ${X(pts.length - 1)} ${y0} L ${X(0)} ${y0} Z`,
-          fill: color(s.tone ?? si), opacity: 0.18
+          fill: tone, opacity: 0.18
         });
         if (go) anim(a, "ch-fade", 0.45 + si * 0.12);
         svg.appendChild(a);
       }
+      const quiet = spot && !isHero(si);
       const path = el("path", {
-        d, fill: "none", stroke: color(s.tone ?? si),
-        "stroke-width": 5, "stroke-linecap": "round", "stroke-linejoin": "round"
+        d, fill: "none", stroke: quiet ? "currentColor" : tone, opacity: quiet ? 0.34 : null,
+        "stroke-width": quiet ? 3 : isHero(si) ? 8 : 5, "stroke-linecap": "round", "stroke-linejoin": "round"
       });
       svg.appendChild(path);
       if (go) {
@@ -387,7 +424,15 @@ window.DeckCharts = (() => {
         const len = path.getTotalLength ? path.getTotalLength() : 2000;
         path.style.strokeDasharray = len;
         path.style.setProperty("--len", len);
-        anim(path, "ch-draw", si * 0.16, 1.4);
+        anim(path, "ch-draw", (spot ? k : si) * 0.16, 1.4);
+      }
+      if (isHero(si)) {
+        const last = pts[pts.length - 1];
+        const halo = el("circle", { cx: last[0], cy: last[1], r: 26, fill: tone, opacity: 0.16 });
+        const dot = el("circle", { cx: last[0], cy: last[1], r: 12, fill: tone });
+        if (go) { anim(halo, "ch-pop", 1.5); anim(dot, "ch-pop", 1.45); }
+        svg.appendChild(halo);
+        svg.appendChild(dot);
       }
       /* End labels instead of a legend: on an axis-free trend chart the line
          has to name itself, and a label at the last point reads faster than
@@ -397,12 +442,13 @@ window.DeckCharts = (() => {
         /* Two series can finish at almost the same height and their labels
            then print on top of each other. Remember where each one wants to
            sit; a pass after the loop spreads them out. */
-        endLabels.push({ x: last[0] + 16, y: last[1] + 7, name: s.name || "",
-                         note: s.note, fill: color(s.tone ?? si), i: si });
+        endLabels.push({ x: last[0] + (isHero(si) ? 34 : 16), y: last[1] + (isHero(si) ? 2 : 8),
+                         name: s.name || "", note: s.note, fill: tone, i: si,
+                         hero: isHero(si), quiet });
       }
       if (cfg.dots !== false) {
         pts.forEach((p, i) => {
-          const c = el("circle", { cx: p[0], cy: p[1], r: 7, fill: color(s.tone ?? si) });
+          const c = el("circle", { cx: p[0], cy: p[1], r: 7, fill: tone });
           if (go) anim(c, "ch-pop", 0.7 + si * 0.16 + i * 0.05);
           svg.appendChild(c);
           if (cfg.values && list.length === 1) {
@@ -420,16 +466,20 @@ window.DeckCharts = (() => {
       endLabels.sort((a, b) => a.y - b.y);
       let floor = -Infinity;
       endLabels.forEach(l => {
-        const need = l.note ? 62 : 34;
+        const need = l.hero ? (l.note ? 92 : 50) : l.note ? 62 : 38;
         if (l.y < floor) l.y = floor;
         floor = l.y + need;
       });
       endLabels.forEach(l => {
-        const t = txt(l.x, l.y, l.name, { anchor: "start", size: 23, class: "ch-cat", fill: l.fill });
+        const t = l.hero
+          ? txt(l.x, l.y, l.name, { anchor: "start", size: 40, class: "ch-hero" })
+          : txt(l.x, l.y, l.name, { anchor: "start", size: l.quiet ? 22 : 23,
+                                    class: l.quiet ? "ch-mono" : "ch-cat", fill: l.quiet ? null : l.fill });
         if (go) anim(t, "ch-fade", 1.0 + l.i * 0.12);
         svg.appendChild(t);
         if (l.note) {
-          const n = txt(l.x, l.y + 27, l.note, { anchor: "start", size: 18 });
+          const n = txt(l.x, l.y + (l.hero ? 36 : 27), l.note,
+                        { anchor: "start", size: l.hero ? 19 : 18, class: spot ? "ch-mono ch-mono--note" : null });
           if (go) anim(n, "ch-fade", 1.1 + l.i * 0.12);
           svg.appendChild(n);
         }

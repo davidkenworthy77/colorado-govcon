@@ -50,6 +50,20 @@ figure.chart > script { display: none; }
   fill: var(--ink, currentColor);
   font-variant-numeric: tabular-nums;
 }
+/* Spotlight line charts (cfg.hero): the hero names itself in bold
+   brand type, the context lines in quiet mono. */
+.ch-hero {
+  font-family: var(--brand-f-body);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  fill: var(--gold-deep, currentColor);
+}
+.ch-mono {
+  font-family: var(--brand-f-mono);
+  font-weight: 500;
+  fill: var(--ink-soft, currentColor);
+}
+.ch-mono--note { font-weight: 400; letter-spacing: 0.08em; fill: var(--ink-mute, currentColor); }
 .ch-legend text { font-family: var(--brand-f-body); font-weight: 600; fill: var(--ink-soft, currentColor); }
 
 /* ---------- axes ---------- */

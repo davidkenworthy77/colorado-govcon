@@ -1233,3 +1233,43 @@
 .close-marks__mmgy { height: 9cqh; }
 .close-marks__gc   { height: 11cqh; }
 .close-marks__rule { width: 2px; height: 9cqh; background: rgba(255,255,255,.55); }
+
+/* ---------- MEASURES ----------
+   A short ruled list down the side of a chart: what replaces the
+   metric the chart retires. Gold numeral, bold name, one-line gloss. */
+.measures { align-self: center; }
+.measures__kicker {
+  font-family: var(--f-mono); font-size: 1.7cqh; line-height: 1.5; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--ink-mute); margin: 0 0 1.6cqh;
+}
+.measures__list { list-style: none; margin: 0; padding: 0; counter-reset: m; }
+.measures__list li {
+  counter-increment: m; display: grid; grid-template-columns: 3.2cqw 1fr;
+  row-gap: .5cqh; padding: 2cqh 0; border-top: 1px solid var(--hairline-strong);
+}
+.measures__list li:last-child { border-bottom: 1px solid var(--hairline-strong); }
+.measures__list li::before {
+  content: counter(m, decimal-leading-zero); grid-row: 1 / 3;
+  font-family: var(--f-mono); font-size: 1.7cqh; color: var(--gold-deep); padding-top: .7cqh;
+}
+.measures__list b { font-family: var(--f-body); font-weight: 700; font-size: 3cqh; line-height: 1.1; color: var(--ink); }
+.measures__list span { font-size: 1.9cqh; line-height: 1.35; color: var(--ink-soft); }
+
+/* ---------- WORD SPLIT ----------
+   One word is the slide. It sits huge on the left, vertically centred
+   in the full slide; the supporting lines stack on the right. */
+.word-split {
+  position: absolute; left: 4.6cqw; right: 6.7cqw; top: 8cqh; bottom: 12cqh;
+  display: grid; grid-template-columns: 48% 1fr; gap: 4cqw; align-items: center;
+}
+.word-split__word {
+  font-family: var(--f-body); font-weight: 700; font-size: 27cqh;
+  line-height: .9; letter-spacing: -0.04em; color: var(--ink); margin: 0;
+}
+.word-split__word::after { content: "."; color: var(--gold); }
+.word-split__side { display: flex; flex-direction: column; gap: 4cqh; }
+.word-split__rule { border-top: 3px solid var(--gold); padding-top: 3cqh; }
+.word-split__side p { text-wrap: balance; }
+/* A longer word: smaller type and a wider column, same weight on the slide. */
+.word-split--long { grid-template-columns: 54% 1fr; }
+.word-split--long .word-split__word { font-size: 15.5cqh; }

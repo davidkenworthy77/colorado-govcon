@@ -1,7 +1,7 @@
 # Marketing to Your Most Important Ambassador: AI
 
 David Kenworthy, MMGY. Colorado Governor's Tourism Conference, Breckenridge,
-September 2026. A 35 minute talk, 32 slides, no Q&A.
+September 2026. A 35 minute talk, 23 slides, no Q&A.
 
 A digital deck, built as code. Full screen at 16:9, animates as you click, works
 as a shared link, exports to PDF. No build step, no framework, no network at
@@ -18,7 +18,7 @@ Then <http://localhost:4477/> — the launcher links to both:
 
 | | |
 |---|---|
-| **`deck/`** | the talk, 32 slides |
+| **`deck/`** | the talk, 23 slides |
 | **`deck/archive.html`** | slides taken out of the talk, still working |
 | **`library/`** | every layout, component and chart, live. **Start here when building.** |
 
